@@ -1,42 +1,38 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Affiliate Content Distribution Portal</title>
+  <title>Affiliate Content Portal</title>
   
-  <!-- Google Fonts: Inter & Noto Sans Bengali -->
+  <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <style>
-    /* =====================================================
-       CSS DESIGN SYSTEM & VARIABLES
-       ===================================================== */
     :root {
       --primary: #4f46e5;
       --primary-hover: #4338ca;
-      --primary-light: #eef2ff;
       --accent: #06b6d4;
-      --bg-page: #0f172a;
-      --bg-surface: #1e293b;
-      --bg-surface-elevated: #334155;
-      --border-subtle: #334155;
+      --bg-page: #0b0f19;
+      --bg-surface: #151d30;
+      --bg-surface-elevated: #1e293b;
+      --bg-input: #0d1322;
+      --border-subtle: #243049;
       --border-focus: #6366f1;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
       --success: #10b981;
-      --success-bg: rgba(16, 185, 129, 0.12);
       --warning: #f59e0b;
       --danger: #ef4444;
       --radius-sm: 8px;
-      --radius-md: 14px;
-      --radius-lg: 20px;
-      --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-      --font-family: 'Inter', 'Noto Sans Bengali', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     *, *::before, *::after {
@@ -49,9 +45,8 @@
       font-family: var(--font-family);
       background-color: var(--bg-page);
       color: var(--text-main);
-      line-height: 1.6;
+      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -61,111 +56,52 @@
       width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 1.25rem 4rem 1.25rem;
+      padding: 1.5rem 1rem 4rem 1rem;
       flex: 1;
     }
 
-    /* Header */
-    header.site-header {
-      background-color: rgba(30, 41, 59, 0.8);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-subtle);
-      position: sticky;
-      top: 0;
-      z-index: 40;
+    /* Clean Minimal Header */
+    .clean-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    .header-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-
-    .brand-group {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .brand-logo {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .clean-header h1 {
+      font-size: 1.6rem;
       font-weight: 800;
-      color: #fff;
-      font-size: 1.2rem;
-      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-    }
-
-    .brand-text h1 {
-      font-size: 1.15rem;
-      font-weight: 700;
       letter-spacing: -0.02em;
       color: #fff;
     }
 
-    .brand-text p {
-      font-size: 0.75rem;
+    .clean-header p {
+      font-size: 0.88rem;
       color: var(--text-muted);
     }
 
-    .badge-live {
+    .item-counter-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: var(--success-bg);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 4px 12px;
+      background: rgba(79, 70, 229, 0.15);
+      border: 1px solid rgba(79, 70, 229, 0.3);
+      padding: 4px 14px;
       border-radius: 9999px;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      color: var(--success);
+      color: #a5b4fc;
+      margin-top: 0.25rem;
     }
 
-    .pulse-dot {
-      width: 7px;
-      height: 7px;
-      background-color: var(--success);
-      border-radius: 50%;
-      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-    }
-
-    /* Controls Bar */
-    .controls-bar {
-      margin: 2rem 0 1.5rem 0;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    @media (min-width: 640px) {
-      .controls-bar {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-      }
-    }
-
+    /* Search Bar */
     .search-wrapper {
+      width: 100%;
+      max-width: 540px;
+      margin: 0.75rem auto 0 auto;
       position: relative;
-      flex: 1;
-      max-width: 480px;
     }
 
     .search-icon {
@@ -182,7 +118,7 @@
       background-color: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       color: var(--text-main);
-      padding: 0.75rem 1rem 0.75rem 2.6rem;
+      padding: 0.8rem 1rem 0.8rem 2.6rem;
       border-radius: var(--radius-md);
       font-size: 0.92rem;
       outline: none;
@@ -194,36 +130,23 @@
       box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
     }
 
-    .stats-counter {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .stats-counter strong {
-      color: var(--text-main);
-    }
-
-    /* Cards Grid */
+    /* Grid Layout */
     .cards-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 1.5rem;
+      gap: 1.25rem;
+      margin-top: 1.5rem;
     }
 
     @media (min-width: 768px) {
-      .cards-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
-    @media (min-width: 1100px) {
-      .cards-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
+    @media (min-width: 1060px) {
+      .cards-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
-    /* Content Card */
+    /* Card */
     .content-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
@@ -234,20 +157,15 @@
       justify-content: space-between;
       box-shadow: var(--shadow-card);
       transition: var(--transition-smooth);
-      position: relative;
-      overflow: hidden;
     }
 
     .content-card:hover {
       border-color: rgba(99, 102, 241, 0.4);
-      transform: translateY(-3px);
+      transform: translateY(-2px);
     }
 
-    .card-badge-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.85rem;
+    .card-top {
+      margin-bottom: 0.75rem;
     }
 
     .card-index {
@@ -258,12 +176,8 @@
       padding: 2px 8px;
       border-radius: 4px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .card-time {
-      font-size: 0.72rem;
-      color: var(--text-dim);
+      display: inline-block;
+      margin-bottom: 0.5rem;
     }
 
     .card-title {
@@ -278,71 +192,66 @@
     .card-description {
       font-size: 0.88rem;
       color: var(--text-muted);
-      line-height: 1.55;
-      margin-bottom: 1.2rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
       word-break: break-word;
       white-space: pre-line;
-      background: rgba(15, 23, 42, 0.5);
+      background: var(--bg-input);
       padding: 0.75rem;
       border-radius: var(--radius-sm);
       border: 1px solid rgba(255, 255, 255, 0.03);
-      max-height: 180px;
+      max-height: 150px;
       overflow-y: auto;
     }
 
-    .card-description::-webkit-scrollbar {
-      width: 4px;
-    }
-    .card-description::-webkit-scrollbar-thumb {
-      background: var(--bg-surface-elevated);
-      border-radius: 4px;
-    }
-
-    .links-section {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      margin-bottom: 1.25rem;
-      font-size: 0.82rem;
+    /* Media & Link Action Buttons */
+    .quick-links-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
     }
 
-    .link-row {
+    .btn-download-media, .btn-open-product {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 0.5rem;
-      background: rgba(15, 23, 42, 0.35);
-      padding: 0.5rem 0.75rem;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.65rem 0.75rem;
       border-radius: var(--radius-sm);
-      border: 1px solid rgba(255, 255, 255, 0.04);
-    }
-
-    .link-label {
-      color: var(--text-dim);
+      font-size: 0.82rem;
       font-weight: 600;
-      min-width: 50px;
-    }
-
-    .link-url-text {
-      color: var(--text-muted);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
       text-decoration: none;
+      cursor: pointer;
+      border: none;
       transition: var(--transition-smooth);
-      flex: 1;
     }
 
-    .link-url-text:hover {
+    .btn-download-media {
+      background: rgba(6, 182, 212, 0.15);
       color: var(--accent);
-      text-decoration: underline;
+      border: 1px solid rgba(6, 182, 212, 0.3);
     }
 
-    /* Actions */
+    .btn-download-media:hover {
+      background: rgba(6, 182, 212, 0.25);
+    }
+
+    .btn-open-product {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-open-product:hover {
+      background: rgba(16, 185, 129, 0.25);
+    }
+
+    /* Action Footer */
     .card-actions {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.45rem;
       margin-top: auto;
     }
 
@@ -351,10 +260,10 @@
       background: linear-gradient(135deg, var(--primary), var(--primary-hover));
       color: #fff;
       border: none;
-      padding: 0.85rem 1rem;
+      padding: 0.8rem 1rem;
       border-radius: var(--radius-md);
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -367,43 +276,34 @@
     .btn-claim:hover:not(:disabled) {
       background: linear-gradient(135deg, #5b52f3, #4338ca);
       transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(79, 70, 229, 0.45);
-    }
-
-    .btn-claim:active:not(:disabled) {
-      transform: translateY(0);
     }
 
     .btn-claim:disabled {
       opacity: 0.6;
       cursor: not-allowed;
-      filter: grayscale(0.5);
     }
 
-    .individual-actions {
+    .sub-copy-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 0.4rem;
+      gap: 0.35rem;
     }
 
     .btn-sub-copy {
       background: var(--bg-surface-elevated);
       color: var(--text-muted);
       border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 0.45rem 0.6rem;
+      padding: 0.4rem 0.5rem;
       border-radius: var(--radius-sm);
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 500;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.3rem;
+      text-align: center;
       transition: var(--transition-smooth);
     }
 
     .btn-sub-copy:hover {
-      background: #475569;
+      background: #334155;
       color: #fff;
     }
 
@@ -413,10 +313,10 @@
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
       padding: 1.25rem;
-      min-height: 380px;
+      min-height: 340px;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.85rem;
     }
 
     .skeleton-line {
@@ -434,34 +334,18 @@
     /* States */
     .state-container {
       text-align: center;
-      padding: 5rem 1.5rem;
+      padding: 4rem 1.5rem;
       background: var(--bg-surface);
       border-radius: var(--radius-lg);
       border: 1px dashed var(--border-subtle);
-      margin-top: 2rem;
+      margin-top: 1rem;
     }
 
-    .state-icon {
-      font-size: 3.5rem;
-      margin-bottom: 1rem;
-      display: inline-block;
-    }
+    .state-icon { font-size: 3rem; margin-bottom: 0.75rem; }
+    .state-title { font-size: 1.15rem; font-weight: 700; color: #fff; margin-bottom: 0.4rem; }
+    .state-desc { color: var(--text-muted); font-size: 0.88rem; max-width: 400px; margin: 0 auto; }
 
-    .state-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 0.5rem;
-    }
-
-    .state-desc {
-      color: var(--text-muted);
-      font-size: 0.92rem;
-      max-width: 420px;
-      margin: 0 auto;
-    }
-
-    /* Toasts */
+    /* Toast */
     .toast-container {
       position: fixed;
       bottom: 24px;
@@ -478,7 +362,7 @@
       pointer-events: auto;
       background: #1e293b;
       color: #fff;
-      padding: 0.9rem 1.2rem;
+      padding: 0.85rem 1.15rem;
       border-radius: var(--radius-md);
       border: 1px solid var(--border-subtle);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -487,8 +371,8 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       border-left: 4px solid var(--primary);
+      animation: slideUp 0.25s ease forwards;
     }
 
     .toast.success { border-left-color: var(--success); }
@@ -496,53 +380,35 @@
     .toast.warning { border-left-color: var(--warning); }
 
     @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
+      from { transform: translateY(15px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
 
-    .spin {
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      100% { transform: rotate(360deg); }
-    }
+    .spin { animation: spin 1s linear infinite; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
-  <!-- Site Header -->
-  <header class="site-header">
-    <div class="header-inner">
-      <div class="brand-group">
-        <div class="brand-logo">A</div>
-        <div class="brand-text">
-          <h1>Affiliate Content Pool</h1>
-          <p>Real-Time Claim & Distribute Platform</p>
-        </div>
-      </div>
-      <div class="badge-live">
-        <span class="pulse-dot"></span>
-        <span>Live Sync Active</span>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main Content Area -->
   <main class="app-container">
     
-    <!-- Controls (Search & Counters) -->
-    <section class="controls-bar">
+    <!-- Clean Minimal Top Section -->
+    <header class="clean-header">
+      <h1>Affiliate Content Pool</h1>
+      <p>Instant claim, direct video download & one-click product access</p>
+      <div class="item-counter-pill" id="statsCounter">
+        Loading items...
+      </div>
+
+      <!-- Search Bar -->
       <div class="search-wrapper">
         <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <input type="text" id="searchInput" class="search-input" placeholder="Search by title, description or hashtags..." aria-label="Search Content" />
+        <input type="text" id="searchInput" class="search-input" placeholder="Search by title, description or keyword..." aria-label="Search content" />
       </div>
-      <div class="stats-counter" id="statsCounter">
-        Loading items...
-      </div>
-    </section>
+    </header>
 
     <!-- Cards Grid -->
     <section id="contentGrid" class="cards-grid" aria-live="polite">
@@ -551,10 +417,10 @@
 
   </main>
 
-  <!-- Toast Notification Container -->
+  <!-- Toast Container -->
   <div class="toast-container" id="toastContainer" aria-live="assertive"></div>
 
-  <!-- Firebase Modular SDK & User Script -->
+  <!-- Firebase Modular SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { 
@@ -572,7 +438,6 @@
     // 🔥 FIREBASE CONFIGURATION — PASTE YOUR FIREBASE
     // CONSOLE CONFIG HERE
     // =====================================================
-
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBbHi-Kwq9gJ_20QNrlqY4RkSVRVPZSAMM",
@@ -588,18 +453,15 @@ const firebaseConfig = {
     // END FIREBASE CONFIGURATION
     // =====================================================
 
-    // State Variables
     let db = null;
     let allAvailableItems = [];
     let isFirebaseConfigured = false;
 
-    // DOM Elements
     const contentGrid = document.getElementById("contentGrid");
     const searchInput = document.getElementById("searchInput");
     const statsCounter = document.getElementById("statsCounter");
     const toastContainer = document.getElementById("toastContainer");
 
-    // Initialize Firebase
     try {
       if (firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("PASTE_YOUR")) {
         const app = initializeApp(firebaseConfig);
@@ -607,25 +469,21 @@ const firebaseConfig = {
         isFirebaseConfigured = true;
       }
     } catch (err) {
-      console.error("Firebase Init Failed:", err);
+      console.error("Firebase init failed:", err);
     }
 
-    // ==========================================
-    // TOAST NOTIFICATIONS
-    // ==========================================
-    function showToast(message, type = "info", duration = 4000) {
+    // Toast Utility
+    function showToast(message, type = "info", duration = 3500) {
       const toast = document.createElement("div");
       toast.className = `toast ${type}`;
-      
       const icons = { success: "✓", error: "✕", warning: "⚠", info: "ℹ" };
       toast.innerHTML = `<span>${icons[type] || 'ℹ'}</span> <span>${escapeHtml(message)}</span>`;
       toastContainer.appendChild(toast);
 
       setTimeout(() => {
-        toast.style.transition = "opacity 0.3s ease, transform 0.3s ease";
         toast.style.opacity = "0";
         toast.style.transform = "scale(0.95)";
-        setTimeout(() => toast.remove(), 300);
+        setTimeout(() => toast.remove(), 250);
       }, duration);
     }
 
@@ -642,73 +500,96 @@ const firebaseConfig = {
     function sanitizeUrl(url) {
       if (!url) return "#";
       const trimmed = url.trim();
-      if (/^https?:\/\//i.test(trimmed)) return trimmed;
-      return "#";
+      return /^https?:\/\//i.test(trimmed) ? trimmed : "#";
     }
 
-    // Clipboard API with legacy fallback
     async function copyTextToClipboard(text) {
       if (navigator.clipboard && window.isSecureContext) {
         try {
           await navigator.clipboard.writeText(text);
           return true;
-        } catch (err) {
-          console.warn("Clipboard API failed, trying fallback:", err);
-        }
+        } catch (_) {}
       }
-
       const textArea = document.createElement("textarea");
       textArea.value = text;
       textArea.style.position = "fixed";
       textArea.style.left = "-999999px";
-      textArea.style.top = "-999999px";
       document.body.appendChild(textArea);
       textArea.focus();
       textArea.select();
-      
-      let successful = false;
-      try {
-        successful = document.execCommand("copy");
-      } catch (err) {
-        console.error("ExecCommand copy failed:", err);
-      }
+      let ok = false;
+      try { ok = document.execCommand("copy"); } catch (_) {}
       textArea.remove();
-      return successful;
+      return ok;
     }
 
     function getClientSessionId() {
-      let id = sessionStorage.getItem("app_client_session_id");
+      let id = sessionStorage.getItem("app_client_id");
       if (!id) {
-        id = "anon_" + Math.random().toString(36).substring(2, 12) + "_" + Date.now();
-        sessionStorage.setItem("app_client_session_id", id);
+        id = "anon_" + Math.random().toString(36).substring(2, 10) + "_" + Date.now();
+        sessionStorage.setItem("app_client_id", id);
       }
       return id;
     }
 
-    function formatCompleteCopyPayload(item) {
+    function formatFullPayload(item) {
       return `Title:\n${item.title || ''}\n\nDescription:\n${item.description || ''}\n\nVideo:\n${item.videoUrl || ''}\n\nProduct:\n${item.productUrl || ''}`;
     }
 
-    // ==========================================
-    // SKELETONS & RENDERING
-    // ==========================================
-    function renderSkeletons(count = 6) {
-      let skeletonsHtml = "";
-      for (let i = 0; i < count; i++) {
-        skeletonsHtml += `
-          <div class="skeleton-card">
-            <div class="skeleton-line" style="height: 20px; width: 30%;"></div>
-            <div class="skeleton-line" style="height: 28px; width: 90%;"></div>
-            <div class="skeleton-line" style="height: 100px; width: 100%;"></div>
-            <div class="skeleton-line" style="height: 35px; width: 100%;"></div>
-            <div class="skeleton-line" style="height: 48px; width: 100%; margin-top: auto;"></div>
-          </div>
-        `;
+    // Direct Instant Video Download Handler
+    async function triggerDirectDownload(videoUrl, title) {
+      if (!videoUrl || videoUrl === "#") {
+        showToast("No valid video URL available.", "warning");
+        return;
       }
-      contentGrid.innerHTML = skeletonsHtml;
+
+      showToast("Starting video download...", "info", 2000);
+
+      try {
+        // Fetch as blob to force browser/mobile gallery download
+        const response = await fetch(videoUrl, { mode: 'cors' });
+        if (!response.ok) throw new Error("CORS / Network restriction");
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = blobUrl;
+        const cleanName = (title || "video").replace(/[^a-zA-Z0-9]/g, "_").substring(0, 30);
+        a.download = `${cleanName}.mp4`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(blobUrl);
+        a.remove();
+        showToast("✓ Video download started!", "success");
+      } catch (err) {
+        // Fallback for cross-origin URLs or external video platforms
+        const a = document.createElement("a");
+        a.href = videoUrl;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.download = "video.mp4";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        showToast("Opening video source directly.", "info");
+      }
     }
 
-    function renderEmptyState(message = "No content is currently available.", subtext = "When new affiliate content is published from the Admin Panel, it will appear here instantly.") {
+    // Render Skeletons
+    function renderSkeletons(count = 6) {
+      contentGrid.innerHTML = Array(count).fill(`
+        <div class="skeleton-card">
+          <div class="skeleton-line" style="height: 18px; width: 25%;"></div>
+          <div class="skeleton-line" style="height: 24px; width: 85%;"></div>
+          <div class="skeleton-line" style="height: 80px; width: 100%;"></div>
+          <div class="skeleton-line" style="height: 38px; width: 100%;"></div>
+          <div class="skeleton-line" style="height: 44px; width: 100%; margin-top: auto;"></div>
+        </div>
+      `).join("");
+    }
+
+    function renderEmptyState(message = "No content available right now.", subtext = "When new entries are published from the Admin Panel, they will appear here live.") {
       contentGrid.innerHTML = `
         <div class="state-container" style="grid-column: 1 / -1;">
           <div class="state-icon">📦</div>
@@ -716,285 +597,212 @@ const firebaseConfig = {
           <p class="state-desc">${escapeHtml(subtext)}</p>
         </div>
       `;
-      statsCounter.innerHTML = `Available Items: <strong>0</strong>`;
-    }
-
-    function renderUnconfiguredState() {
-      contentGrid.innerHTML = `
-        <div class="state-container" style="grid-column: 1 / -1; border-color: var(--warning);">
-          <div class="state-icon">⚙️</div>
-          <h2 class="state-title">Firebase Configuration Required</h2>
-          <p class="state-desc">Paste your Firebase project credentials in the <code>firebaseConfig</code> object inside <code>index.html</code> to connect.</p>
-        </div>
-      `;
-      statsCounter.innerHTML = `Status: <strong style="color:var(--warning)">Not Connected</strong>`;
+      statsCounter.textContent = `0 Available Items`;
     }
 
     function renderCards(items) {
       if (!items || items.length === 0) {
         if (searchInput.value.trim().length > 0) {
-          renderEmptyState("No matching content found", "Try searching with different keywords.");
+          renderEmptyState("No matching items found", "Try different search terms.");
         } else {
           renderEmptyState();
         }
         return;
       }
 
-      statsCounter.innerHTML = `Available Items: <strong>${items.length}</strong>`;
+      statsCounter.textContent = `${items.length} Available Items`;
 
       contentGrid.innerHTML = items.map((item, index) => {
-        const safeVideoUrl = sanitizeUrl(item.videoUrl);
-        const safeProductUrl = sanitizeUrl(item.productUrl);
-        const hasValidVideo = safeVideoUrl !== "#";
-        const hasValidProduct = safeProductUrl !== "#";
+        const safeVideo = sanitizeUrl(item.videoUrl);
+        const safeProduct = sanitizeUrl(item.productUrl);
 
         return `
-          <article class="content-card" id="card-${item.id}" data-id="${item.id}">
-            <div>
-              <div class="card-badge-row">
-                <span class="card-index">Item #${index + 1}</span>
-                <span class="card-time">Available</span>
-              </div>
-              
+          <article class="content-card" id="card-${item.id}">
+            <div class="card-top">
+              <span class="card-index">Item #${index + 1}</span>
               <h2 class="card-title">${escapeHtml(item.title)}</h2>
-              
               <div class="card-description">${escapeHtml(item.description)}</div>
 
-              <div class="links-section">
-                <div class="link-row">
-                  <span class="link-label">Video:</span>
-                  ${hasValidVideo ? `
-                    <a href="${safeVideoUrl}" target="_blank" rel="noopener noreferrer" class="link-url-text" title="${safeVideoUrl}">
-                      ${escapeHtml(item.videoUrl)}
-                    </a>
-                  ` : `<span class="link-url-text" style="color:var(--text-dim)">No video provided</span>`}
-                </div>
-                <div class="link-row">
-                  <span class="link-label">Product:</span>
-                  ${hasValidProduct ? `
-                    <a href="${safeProductUrl}" target="_blank" rel="noopener noreferrer" class="link-url-text" title="${safeProductUrl}">
-                      ${escapeHtml(item.productUrl)}
-                    </a>
-                  ` : `<span class="link-url-text" style="color:var(--text-dim)">No product link</span>`}
-                </div>
+              <!-- Quick Link Action Buttons -->
+              <div class="quick-links-grid">
+                <button type="button" class="btn-download-media" data-download-btn="${item.id}">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  <span>Download</span>
+                </button>
+
+                <a href="${safeProduct}" target="_blank" rel="noopener noreferrer" class="btn-open-product">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                  <span>Open Product</span>
+                </a>
               </div>
             </div>
 
+            <!-- Card Actions -->
             <div class="card-actions">
-              <!-- Primary Atomic Claim & Copy -->
               <button type="button" class="btn-claim" data-claim-id="${item.id}">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                   <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                 </svg>
                 <span>Copy & Claim (Remove)</span>
               </button>
 
-              <!-- Optional Individual Copies -->
-              <div class="individual-actions">
-                <button type="button" class="btn-sub-copy" data-copy-field="title" data-item-id="${item.id}">
-                  Copy Title
-                </button>
-                <button type="button" class="btn-sub-copy" data-copy-field="description" data-item-id="${item.id}">
-                  Copy Desc
-                </button>
-                <button type="button" class="btn-sub-copy" data-copy-field="videoUrl" data-item-id="${item.id}">
-                  Copy Video
-                </button>
-                <button type="button" class="btn-sub-copy" data-copy-field="productUrl" data-item-id="${item.id}">
-                  Copy Product
-                </button>
+              <div class="sub-copy-grid">
+                <button type="button" class="btn-sub-copy" data-copy-field="title" data-item-id="${item.id}">Copy Title</button>
+                <button type="button" class="btn-sub-copy" data-copy-field="description" data-item-id="${item.id}">Copy Desc</button>
+                <button type="button" class="btn-sub-copy" data-copy-field="videoUrl" data-item-id="${item.id}">Copy Video URL</button>
+                <button type="button" class="btn-sub-copy" data-copy-field="productUrl" data-item-id="${item.id}">Copy Product URL</button>
               </div>
             </div>
           </article>
         `;
       }).join("");
 
-      attachCardEventListeners();
+      attachEventListeners();
     }
 
-    // ==========================================
-    // ATOMIC CLAIM WITH FIRESTORE TRANSACTION
-    // ==========================================
-    async function handleClaimAndCopy(contentId, buttonElement) {
-      if (!db) {
-        showToast("Database not initialized", "error");
-        return;
-      }
+    // Atomic Claim Execution
+    async function handleClaim(contentId, btn) {
+      if (!db) return;
 
-      const originalButtonContent = buttonElement.innerHTML;
-      buttonElement.disabled = true;
-      buttonElement.innerHTML = `
-        <svg class="spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `
+        <svg class="spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-linecap="round"></circle>
         </svg>
-        <span>Claiming & Copying...</span>
+        <span>Claiming...</span>
       `;
 
       const docRef = doc(db, "contentItems", contentId);
-      const clientSessionId = getClientSessionId();
+      const sessionId = getClientSessionId();
 
       try {
-        let claimedData = null;
+        let claimedItem = null;
 
-        // Atomic Transaction: Prevents race conditions between multiple users
         await runTransaction(db, async (transaction) => {
-          const docSnap = await transaction.get(docRef);
-
-          if (!docSnap.exists()) {
-            throw new Error("ALREADY_CLAIMED_OR_DELETED");
-          }
-
-          const data = docSnap.data();
-
-          if (data.status !== "available") {
-            throw new Error("ALREADY_CLAIMED");
-          }
+          const snap = await transaction.get(docRef);
+          if (!snap.exists()) throw new Error("TAKEN");
+          const data = snap.data();
+          if (data.status !== "available") throw new Error("TAKEN");
 
           transaction.update(docRef, {
             status: "claimed",
             claimedAt: serverTimestamp(),
-            claimedBySession: clientSessionId
+            claimedBySession: sessionId
           });
 
-          claimedData = data;
+          claimedItem = data;
         });
 
-        // Copy formatted content payload to clipboard
-        if (claimedData) {
-          const payload = formatCompleteCopyPayload(claimedData);
-          const copySuccess = await copyTextToClipboard(payload);
+        if (claimedItem) {
+          const payload = formatFullPayload(claimedItem);
+          const ok = await copyTextToClipboard(payload);
+          showToast(ok ? "✓ Content copied & item claimed!" : "✓ Item claimed successfully!", "success");
 
-          if (copySuccess) {
-            showToast("✓ Copied all details & claimed!", "success");
-          } else {
-            showToast("✓ Claimed! Please copy content manually.", "warning");
-          }
-
-          // Smoothly remove card from UI
-          const cardEl = document.getElementById(`card-${contentId}`);
-          if (cardEl) {
-            cardEl.style.transition = "transform 0.3s ease, opacity 0.3s ease";
-            cardEl.style.opacity = "0";
-            cardEl.style.transform = "scale(0.95)";
+          const card = document.getElementById(`card-${contentId}`);
+          if (card) {
+            card.style.opacity = "0";
+            card.style.transform = "scale(0.95)";
             setTimeout(() => {
               allAvailableItems = allAvailableItems.filter(i => i.id !== contentId);
-              applySearchFilter();
-            }, 300);
+              applySearch();
+            }, 250);
           }
         }
-
       } catch (err) {
-        console.error("Claim transaction error:", err);
-        buttonElement.disabled = false;
-        buttonElement.innerHTML = originalButtonContent;
-
-        if (err.message === "ALREADY_CLAIMED" || err.message === "ALREADY_CLAIMED_OR_DELETED") {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        if (err.message === "TAKEN") {
           showToast("⚠ This item was just claimed by another user.", "warning");
           allAvailableItems = allAvailableItems.filter(i => i.id !== contentId);
-          applySearchFilter();
+          applySearch();
         } else {
-          showToast("Failed to claim content. Check internet connection.", "error");
+          showToast("Failed to complete claim. Try again.", "error");
         }
       }
     }
 
     async function handleFieldCopy(field, itemId) {
       const item = allAvailableItems.find(i => i.id === itemId);
-      if (!item) return;
-
-      const valueToCopy = item[field] || "";
-      if (!valueToCopy) {
-        showToast(`This item has no ${field}.`, "warning");
+      if (!item || !item[field]) {
+        showToast(`No ${field} available.`, "warning");
         return;
       }
-
-      const success = await copyTextToClipboard(valueToCopy);
-      if (success) {
-        showToast(`✓ Copied ${field} to clipboard!`, "success");
-      } else {
-        showToast(`Unable to copy ${field}.`, "error");
-      }
+      const ok = await copyTextToClipboard(item[field]);
+      showToast(ok ? `✓ Copied ${field}!` : `Unable to copy ${field}.`, ok ? "success" : "error");
     }
 
-    function attachCardEventListeners() {
+    function attachEventListeners() {
+      // Claim & Copy
       document.querySelectorAll("[data-claim-id]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const contentId = btn.getAttribute("data-claim-id");
-          handleClaimAndCopy(contentId, btn);
-        });
+        btn.addEventListener("click", () => handleClaim(btn.getAttribute("data-claim-id"), btn));
       });
 
+      // Individual field copy
       document.querySelectorAll("[data-copy-field]").forEach(btn => {
         btn.addEventListener("click", () => {
-          const field = btn.getAttribute("data-copy-field");
-          const itemId = btn.getAttribute("data-item-id");
-          handleFieldCopy(field, itemId);
+          handleFieldCopy(btn.getAttribute("data-copy-field"), btn.getAttribute("data-item-id"));
+        });
+      });
+
+      // Direct Video Download
+      document.querySelectorAll("[data-download-btn]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-download-btn");
+          const item = allAvailableItems.find(i => i.id === id);
+          if (item) triggerDirectDownload(item.videoUrl, item.title);
         });
       });
     }
 
-    function applySearchFilter() {
+    function applySearch() {
       const queryText = searchInput.value.toLowerCase().trim();
       if (!queryText) {
         renderCards(allAvailableItems);
         return;
       }
-
-      const filtered = allAvailableItems.filter(item => {
-        const titleMatch = (item.title || "").toLowerCase().includes(queryText);
-        const descMatch = (item.description || "").toLowerCase().includes(queryText);
-        return titleMatch || descMatch;
-      });
-
+      const filtered = allAvailableItems.filter(i => 
+        (i.title || "").toLowerCase().includes(queryText) ||
+        (i.description || "").toLowerCase().includes(queryText)
+      );
       renderCards(filtered);
     }
 
-    searchInput.addEventListener("input", applySearchFilter);
+    searchInput.addEventListener("input", applySearch);
 
-    // ==========================================
-    // REAL-TIME FIRESTORE LISTENER
-    // ==========================================
-    function setupRealTimeListener() {
+    // Real-Time Listener
+    function startRealTimeSync() {
       if (!isFirebaseConfigured || !db) {
-        renderUnconfiguredState();
+        renderEmptyState("Firebase Not Configured", "Please paste your firebaseConfig object into index.html.");
         return;
       }
 
       renderSkeletons(6);
 
-      const itemsCollection = collection(db, "contentItems");
-      const q = query(itemsCollection, where("status", "==", "available"));
-
+      const q = query(collection(db, "contentItems"), where("status", "==", "available"));
       onSnapshot(q, (snapshot) => {
         const items = [];
-        snapshot.forEach((docSnapshot) => {
-          items.push({
-            id: docSnapshot.id,
-            ...docSnapshot.data()
-          });
-        });
+        snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
 
-        // Sort descending by creation date
-        items.sort((a, b) => {
-          const timeA = a.createdAt?.seconds || 0;
-          const timeB = b.createdAt?.seconds || 0;
-          return timeB - timeA;
-        });
-
+        items.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
         allAvailableItems = items;
-        applySearchFilter();
-
+        applySearch();
       }, (error) => {
-        console.error("Firestore snapshot error:", error);
-        showToast("Error connecting to real-time database.", "error");
-        renderEmptyState("Database Connection Error", "Unable to fetch content items. Check Firestore security rules.");
+        console.error("Snapshot error:", error);
+        showToast("Database connection error.", "error");
       });
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      setupRealTimeListener();
-    });
+    document.addEventListener("DOMContentLoaded", startRealTimeSync);
   </script>
 </body>
 </html>
