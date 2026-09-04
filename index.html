@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Admin Dashboard — Affiliate Content Publisher</title>
-
+  <title>Affiliate Content Distribution Portal</title>
+  
   <!-- Google Fonts: Inter & Noto Sans Bengali -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,18 +12,17 @@
 
   <style>
     /* =====================================================
-       DESIGN SYSTEM & CSS VARIABLES
+       CSS DESIGN SYSTEM & VARIABLES
        ===================================================== */
     :root {
       --primary: #4f46e5;
       --primary-hover: #4338ca;
-      --primary-light: rgba(79, 70, 229, 0.12);
+      --primary-light: #eef2ff;
       --accent: #06b6d4;
-      --bg-page: #0b0f19;
-      --bg-surface: #151d30;
-      --bg-surface-elevated: #1e293b;
-      --bg-input: #0d1322;
-      --border-subtle: #243049;
+      --bg-page: #0f172a;
+      --bg-surface: #1e293b;
+      --bg-surface-elevated: #334155;
+      --border-subtle: #334155;
       --border-focus: #6366f1;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
@@ -31,17 +30,16 @@
       --success: #10b981;
       --success-bg: rgba(16, 185, 129, 0.12);
       --warning: #f59e0b;
-      --warning-bg: rgba(245, 158, 11, 0.12);
       --danger: #ef4444;
-      --danger-bg: rgba(239, 68, 68, 0.12);
       --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 18px;
-      --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
       --font-family: 'Inter', 'Noto Sans Bengali', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --transition-smooth: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
+    /* Reset & Base */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
@@ -52,24 +50,26 @@
       font-family: var(--font-family);
       background-color: var(--bg-page);
       color: var(--text-main);
-      line-height: 1.5;
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    .admin-container {
+    /* Containers */
+    .app-container {
       width: 100%;
-      max-width: 1300px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 1.5rem 1.25rem 4rem 1.25rem;
+      padding: 0 1.25rem 4rem 1.25rem;
       flex: 1;
     }
 
     /* Header */
-    header.admin-header {
-      background-color: rgba(21, 29, 48, 0.85);
+    header.site-header {
+      background-color: rgba(30, 41, 59, 0.8);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border-subtle);
@@ -79,9 +79,9 @@
     }
 
     .header-inner {
-      max-width: 1300px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 0.9rem 1.25rem;
+      padding: 1rem 1.25rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -95,37 +95,38 @@
     }
 
     .brand-logo {
-      width: 38px;
-      height: 38px;
-      background: linear-gradient(135deg, var(--accent), var(--primary));
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
       border-radius: var(--radius-sm);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
       color: #fff;
-      font-size: 1.1rem;
-      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+      font-size: 1.2rem;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
     }
 
     .brand-text h1 {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 700;
+      letter-spacing: -0.02em;
       color: #fff;
     }
 
     .brand-text p {
-      font-size: 0.72rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
     }
 
-    .status-badge {
+    .badge-live {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       background: var(--success-bg);
       border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 5px 12px;
+      padding: 4px 12px;
       border-radius: 9999px;
       font-size: 0.75rem;
       font-weight: 600;
@@ -147,215 +148,219 @@
       100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
 
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+    /* Controls Bar */
+    .controls-bar {
+      margin: 2rem 0 1.5rem 0;
+      display: flex;
+      flex-direction: column;
       gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    @media (min-width: 900px) {
-      .stats-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-    }
-
-    .stat-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    .stat-label {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .stat-val {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #fff;
-    }
-
-    .stat-sub {
-      font-size: 0.72rem;
-      color: var(--text-dim);
-    }
-
-    /* Form Section */
-    .section-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 1.75rem;
-      box-shadow: var(--shadow-card);
-      margin-bottom: 2.5rem;
-    }
-
-    .section-header {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .section-header h2 {
-      font-size: 1.25rem;
-      font-weight: 700;
-    }
-
-    .section-header p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .bulk-form-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.25rem;
-    }
-
-    @media (min-width: 960px) {
-      .bulk-form-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    .textarea-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.4rem;
-    }
-
-    .textarea-header label {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    .line-pill {
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 9999px;
-      background: var(--bg-surface-elevated);
-      color: var(--accent);
-      border: 1px solid var(--border-subtle);
-    }
-
-    .bulk-textarea {
-      width: 100%;
-      height: 220px;
-      background-color: var(--bg-input);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-main);
-      padding: 0.85rem;
-      border-radius: var(--radius-sm);
-      font-size: 0.88rem;
-      font-family: var(--font-family);
-      resize: vertical;
-      outline: none;
-      line-height: 1.55;
-      transition: var(--transition-smooth);
-      white-space: pre;
-    }
-
-    .bulk-textarea:focus {
-      border-color: var(--border-focus);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-    }
-
-    .form-input {
-      width: 100%;
-      background-color: var(--bg-input);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-main);
-      padding: 0.75rem 0.9rem;
-      border-radius: var(--radius-sm);
-      font-size: 0.92rem;
-      font-family: inherit;
-      outline: none;
-      transition: var(--transition-smooth);
-    }
-
-    .form-input:focus {
-      border-color: var(--border-focus);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-    }
-
-    .product-url-row {
-      margin-top: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    /* Validation Bar */
-    .validation-status-bar {
-      margin-top: 1.5rem;
-      padding: 1rem 1.25rem;
-      border-radius: var(--radius-md);
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      background: var(--bg-input);
-      border: 1px solid var(--border-subtle);
     }
 
     @media (min-width: 640px) {
-      .validation-status-bar {
+      .controls-bar {
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
       }
     }
 
-    .val-details {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
+    .search-wrapper {
+      position: relative;
+      flex: 1;
+      max-width: 480px;
     }
 
-    .val-counts-summary {
-      font-size: 0.86rem;
-      font-weight: 600;
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
       color: var(--text-main);
+      padding: 0.75rem 1rem 0.75rem 2.6rem;
+      border-radius: var(--radius-md);
+      font-size: 0.92rem;
+      outline: none;
+      transition: var(--transition-smooth);
     }
 
-    .val-message {
-      font-size: 0.8rem;
+    .search-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .stats-counter {
+      font-size: 0.88rem;
+      color: var(--text-muted);
       font-weight: 500;
     }
 
-    .val-message.valid { color: var(--success); }
-    .val-message.invalid { color: var(--warning); }
-    .val-message.empty { color: var(--text-dim); }
+    .stats-counter strong {
+      color: var(--text-main);
+    }
 
-    .btn-primary {
+    /* Grid Layout */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1100px) {
+      .cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Content Card */
+    .content-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-card);
+      transition: var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content-card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-3px);
+    }
+
+    .card-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.85rem;
+    }
+
+    .card-index {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(6, 182, 212, 0.1);
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-time {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.45;
+      margin-bottom: 0.75rem;
+      word-break: break-word;
+    }
+
+    .card-description {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 1.2rem;
+      word-break: break-word;
+      white-space: pre-line;
+      background: rgba(15, 23, 42, 0.5);
+      padding: 0.75rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    /* Scrollbar for Description */
+    .card-description::-webkit-scrollbar {
+      width: 4px;
+    }
+    .card-description::-webkit-scrollbar-thumb {
+      background: var(--bg-surface-elevated);
+      border-radius: 4px;
+    }
+
+    /* Video & Product URL sections */
+    .links-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.82rem;
+    }
+
+    .link-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      background: rgba(15, 23, 42, 0.35);
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .link-label {
+      color: var(--text-dim);
+      font-weight: 600;
+      min-width: 50px;
+    }
+
+    .link-url-text {
+      color: var(--text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-decoration: none;
+      transition: var(--transition-smooth);
+      flex: 1;
+    }
+
+    .link-url-text:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    /* Buttons */
+    .card-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+
+    .btn-claim {
+      width: 100%;
       background: linear-gradient(135deg, var(--primary), var(--primary-hover));
       color: #fff;
       border: none;
-      padding: 0.85rem 1.25rem;
+      padding: 0.85rem 1rem;
       border-radius: var(--radius-md);
       font-weight: 600;
       font-size: 0.95rem;
       cursor: pointer;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
@@ -363,268 +368,109 @@
       box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
     }
 
-    .btn-primary:hover:not(:disabled) {
+    .btn-claim:hover:not(:disabled) {
       background: linear-gradient(135deg, #5b52f3, #4338ca);
       transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(79, 70, 229, 0.45);
     }
 
-    .btn-primary:disabled {
-      opacity: 0.55;
+    .btn-claim:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn-claim:disabled {
+      opacity: 0.6;
       cursor: not-allowed;
+      filter: grayscale(0.5);
     }
 
-    /* Inventory Table */
-    .inventory-toolbar {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-    }
-
-    @media (min-width: 640px) {
-      .inventory-toolbar {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-      }
-    }
-
-    .tab-group {
-      display: inline-flex;
-      background: var(--bg-input);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 3px;
-      gap: 2px;
-    }
-
-    .tab-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 0.45rem 0.9rem;
-      font-size: 0.8rem;
-      font-weight: 600;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: var(--transition-smooth);
-    }
-
-    .tab-btn.active {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .table-container {
-      width: 100%;
-      overflow-x: auto;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      background: var(--bg-input);
-    }
-
-    table.data-table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 0.85rem;
-      min-width: 800px;
-    }
-
-    table.data-table th {
-      background: var(--bg-surface-elevated);
-      color: var(--text-muted);
-      font-weight: 600;
-      padding: 0.85rem 1rem;
-      border-bottom: 1px solid var(--border-subtle);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    table.data-table td {
-      padding: 0.9rem 1rem;
-      border-bottom: 1px solid var(--border-subtle);
-      color: var(--text-main);
-      vertical-align: middle;
-    }
-
-    table.data-table tbody tr:hover {
-      background-color: rgba(255, 255, 255, 0.02);
-    }
-
-    .table-status-pill {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 9999px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      text-transform: capitalize;
-    }
-
-    .table-status-pill.available {
-      background: var(--success-bg);
-      color: var(--success);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
-
-    .table-status-pill.claimed {
-      background: var(--warning-bg);
-      color: var(--warning);
-      border: 1px solid rgba(245, 158, 11, 0.3);
-    }
-
-    .action-btn-group {
-      display: flex;
-      align-items: center;
+    .individual-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 0.4rem;
     }
 
-    .btn-action-icon {
+    .btn-sub-copy {
       background: var(--bg-surface-elevated);
-      border: 1px solid var(--border-subtle);
       color: var(--text-muted);
-      padding: 5px 8px;
-      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0.45rem 0.6rem;
+      border-radius: var(--radius-sm);
       font-size: 0.74rem;
-      font-weight: 600;
+      font-weight: 500;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
       transition: var(--transition-smooth);
     }
 
-    .btn-action-icon:hover {
-      color: #fff;
-      border-color: var(--border-focus);
-    }
-
-    .btn-action-icon.restore:hover {
-      background: var(--accent);
-      border-color: var(--accent);
+    .btn-sub-copy:hover {
+      background: #475569;
       color: #fff;
     }
 
-    .btn-action-icon.delete:hover {
-      background: var(--danger);
-      border-color: var(--danger);
-      color: #fff;
-    }
-
-    /* Modals */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(4px);
-      z-index: 150;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-
-    .modal-backdrop.open {
-      display: flex;
-    }
-
-    .modal-box {
+    /* Loading Skeletons */
+    .skeleton-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      width: 100%;
-      max-width: 780px;
-      max-height: 88vh;
-      display: flex;
-      flex-direction: column;
-      box-shadow: var(--shadow-card);
-      animation: modalScale 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes modalScale {
-      from { transform: scale(0.94); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    .modal-header {
-      padding: 1.25rem 1.5rem;
-      border-bottom: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .modal-header h3 {
-      font-size: 1.15rem;
-      font-weight: 700;
-    }
-
-    .btn-close-modal {
-      background: transparent;
-      border: none;
-      color: var(--text-dim);
-      font-size: 1.4rem;
-      cursor: pointer;
-      line-height: 1;
-    }
-
-    .modal-body {
-      padding: 1.5rem;
-      overflow-y: auto;
-      flex: 1;
+      padding: 1.25rem;
+      min-height: 380px;
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
 
-    .modal-footer {
-      padding: 1rem 1.5rem;
-      border-top: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 0.75rem;
-      background: rgba(13, 19, 34, 0.5);
+    .skeleton-line {
+      background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: var(--radius-sm);
     }
 
-    .preview-entry-card {
-      background: var(--bg-input);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      font-size: 0.85rem;
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
 
-    .preview-entry-num {
-      font-size: 0.75rem;
+    /* Empty and Error State */
+    .state-container {
+      text-align: center;
+      padding: 5rem 1.5rem;
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      border: 1px dashed var(--border-subtle);
+      margin-top: 2rem;
+    }
+
+    .state-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+
+    .state-title {
+      font-size: 1.25rem;
       font-weight: 700;
-      color: var(--accent);
-    }
-
-    .btn-secondary {
-      background: var(--bg-surface-elevated);
-      color: var(--text-muted);
-      border: 1px solid var(--border-subtle);
-      padding: 0.75rem 1.25rem;
-      border-radius: var(--radius-md);
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: var(--transition-smooth);
-    }
-
-    .btn-secondary:hover {
-      background: #334155;
       color: #fff;
+      margin-bottom: 0.5rem;
     }
 
-    /* Toast Notifications */
+    .state-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    /* Toast Notification */
     .toast-container {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      z-index: 200;
+      z-index: 100;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -645,6 +491,7 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       border-left: 4px solid var(--primary);
     }
 
@@ -652,210 +499,83 @@
     .toast.error { border-left-color: var(--danger); }
     .toast.warning { border-left-color: var(--warning); }
 
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0; transform: scale(0.95); }
+    }
+
+    /* Spin icon */
     .spin {
       animation: spin 1s linear infinite;
     }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
 
-  <!-- ADMIN HEADER -->
-  <header class="admin-header">
+  <!-- Site Header -->
+  <header class="site-header">
     <div class="header-inner">
       <div class="brand-group">
         <div class="brand-logo">A</div>
         <div class="brand-text">
-          <h1>Admin Control Panel</h1>
-          <p>Bulk Publisher & Distribution Manager</p>
+          <h1>Affiliate Content Pool</h1>
+          <p>Real-Time Claim & Distribute Platform</p>
         </div>
       </div>
-      <div class="status-badge">
+      <div class="badge-live">
         <span class="pulse-dot"></span>
-        <span>Connected</span>
+        <span>Live Sync Active</span>
       </div>
     </div>
   </header>
 
-  <!-- MAIN CONTAINER -->
-  <main class="admin-container">
+  <!-- Main User Area -->
+  <main class="app-container">
     
-    <!-- STATS CARDS -->
-    <section class="stats-grid">
-      <div class="stat-card">
-        <span class="stat-label">Total Available</span>
-        <span class="stat-val" id="statAvailable" style="color:var(--success)">0</span>
-        <span class="stat-sub">Ready for user claims</span>
+    <!-- Controls (Search & Counters) -->
+    <section class="controls-bar">
+      <div class="search-wrapper">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search by title, description or hashtags..." aria-label="Search Content" />
       </div>
-      <div class="stat-card">
-        <span class="stat-label">Claimed Content</span>
-        <span class="stat-val" id="statClaimed" style="color:var(--warning)">0</span>
-        <span class="stat-sub">Consumed by users</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-label">Published Today</span>
-        <span class="stat-val" id="statToday">0</span>
-        <span class="stat-sub">Uploaded in last 24h</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-label">Total Published</span>
-        <span class="stat-val" id="statTotal" style="color:var(--accent)">0</span>
-        <span class="stat-sub">Lifetime content items</span>
+      <div class="stats-counter" id="statsCounter">
+        Loading items...
       </div>
     </section>
 
-    <!-- BULK PUBLISHER FORM -->
-    <section class="section-card">
-      <div class="section-header">
-        <h2>Bulk Content Publisher</h2>
-        <p>Paste multiple titles, descriptions, and video URLs (one per line). All entries are matched line-by-line and associated with the single Product URL.</p>
-      </div>
-
-      <form id="bulkPublishForm" onsubmit="return false;">
-        <div class="bulk-form-grid">
-          
-          <!-- Column 1: Titles -->
-          <div class="form-group">
-            <div class="textarea-header">
-              <label for="titlesInput">Titles (One per line)</label>
-              <span class="line-pill" id="counterTitles">0 Titles</span>
-            </div>
-            <textarea id="titlesInput" class="bulk-textarea" placeholder="Enter one title per line...&#10;চুল পড়া কি সত্যিই বন্ধ করা সম্ভব? 😱&#10;মাত্র ৩০ দিনে নতুন চুল!"></textarea>
-          </div>
-
-          <!-- Column 2: Descriptions -->
-          <div class="form-group">
-            <div class="textarea-header">
-              <label for="descriptionsInput">Descriptions (One per line)</label>
-              <span class="line-pill" id="counterDescriptions">0 Descriptions</span>
-            </div>
-            <textarea id="descriptionsInput" class="bulk-textarea" placeholder="Enter one description per line...&#10;HAIR VITA তেলের গোপন ফর্মুলা! #HairVita&#10;Hair Vita Nourishing Hair Oil ব্যবহার করুন!"></textarea>
-          </div>
-
-          <!-- Column 3: Video URLs -->
-          <div class="form-group">
-            <div class="textarea-header">
-              <label for="videosInput">Video URLs (One per line)</label>
-              <span class="line-pill" id="counterVideos">0 Videos</span>
-            </div>
-            <textarea id="videosInput" class="bulk-textarea" placeholder="Enter one video URL per line...&#10;https://youtube.com/watch?v=...&#10;https://tiktok.com/@video/..."></textarea>
-          </div>
-
-        </div>
-
-        <!-- Shared Product URL -->
-        <div class="product-url-row">
-          <label for="productUrlInput" style="font-size:0.85rem; font-weight:600;">Shared Product URL (Applies to all entries in this batch)</label>
-          <input type="url" id="productUrlInput" class="form-input" placeholder="https://example.com/product/hair-vita-oil" required />
-        </div>
-
-        <!-- Live Validation Status Bar -->
-        <div class="validation-status-bar">
-          <div class="val-details">
-            <span class="val-counts-summary" id="valCountsSummary">0 Titles • 0 Descriptions • 0 Videos</span>
-            <span class="val-message empty" id="valMessage">Enter content lines to validate before publishing.</span>
-          </div>
-          <button type="button" class="btn-primary" id="btnOpenPreview" disabled>
-            <span>Preview & Publish</span>
-          </button>
-        </div>
-      </form>
-    </section>
-
-    <!-- INVENTORY TABLE -->
-    <section class="section-card">
-      <div class="inventory-toolbar">
-        <div>
-          <h2>Real-Time Content Inventory</h2>
-          <p style="font-size:0.85rem; color:var(--text-muted);">Live feed of all items in Firestore. Restore claimed entries or permanently delete items.</p>
-        </div>
-        <div class="tab-group">
-          <button type="button" class="tab-btn active" data-filter="all">All (<span id="countAll">0</span>)</button>
-          <button type="button" class="tab-btn" data-filter="available">Available (<span id="countAvailable">0</span>)</button>
-          <button type="button" class="tab-btn" data-filter="claimed">Claimed (<span id="countClaimed">0</span>)</button>
-        </div>
-      </div>
-
-      <div class="table-container">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Status</th>
-              <th>Title</th>
-              <th>Batch ID</th>
-              <th>Created Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="inventoryTableBody">
-            <tr>
-              <td colspan="5" style="text-align:center; padding: 3rem; color: var(--text-dim);">
-                Loading inventory items...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <!-- Content Items Grid -->
+    <section id="contentGrid" class="cards-grid" aria-live="polite">
+      <!-- Loading skeleton items rendered here via JS -->
     </section>
 
   </main>
 
-  <!-- PREVIEW MODAL -->
-  <div class="modal-backdrop" id="previewModal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 id="previewModalTitle">Ready to Publish (0 Entries)</h3>
-        <button type="button" class="btn-close-modal" id="btnClosePreview">&times;</button>
-      </div>
-      <div class="modal-body" id="previewModalBody">
-        <!-- Preview list items rendered here -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-secondary" id="btnCancelPreview">Cancel</button>
-        <button type="button" class="btn-primary" id="btnConfirmPublish">
-          <span>Publish Batch</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- DELETE CONFIRMATION MODAL -->
-  <div class="modal-backdrop" id="deleteModal">
-    <div class="modal-box" style="max-width: 460px;">
-      <div class="modal-header">
-        <h3>Confirm Permanent Deletion</h3>
-        <button type="button" class="btn-close-modal" id="btnCloseDeleteModal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p style="font-size:0.9rem; color:var(--text-muted);">
-          Are you sure you want to permanently delete this content item from Firestore?
-        </p>
-        <div id="deleteItemDetails" style="background:var(--bg-input); padding:0.8rem; border-radius:var(--radius-sm); font-size:0.85rem; border:1px solid var(--border-subtle); margin-top:0.5rem;"></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-secondary" id="btnCancelDelete">Cancel</button>
-        <button type="button" class="btn-primary" id="btnConfirmDelete" style="background:var(--danger);">
-          <span>Delete Item</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- TOAST NOTIFICATIONS -->
+  <!-- Global Toast Notifications Stack -->
   <div class="toast-container" id="toastContainer" aria-live="assertive"></div>
 
-  <!-- FIREBASE MODULAR SDK -->
+  <!-- Firebase Modular SDK & Application Logic -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { 
       getFirestore, 
       collection, 
-      doc, 
-      writeBatch, 
       query, 
+      where, 
+      orderBy, 
       onSnapshot, 
-      deleteDoc, 
-      updateDoc, 
+      runTransaction, 
+      doc, 
       serverTimestamp 
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -863,7 +583,6 @@
     // 🔥 FIREBASE CONFIGURATION — PASTE YOUR FIREBASE
     // CONSOLE CONFIG HERE
     // =====================================================
-
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBbHi-Kwq9gJ_20QNrlqY4RkSVRVPZSAMM",
@@ -880,70 +599,54 @@ const firebaseConfig = {
     // =====================================================
 
     // State Variables
-    let app = null;
     let db = null;
-    let inventoryItems = [];
-    let currentFilter = "all";
-    let pendingDeletionId = null;
-    let parsedBatchData = [];
+    let allAvailableItems = [];
+    let isFirebaseConfigured = false;
+    let unsubscribeFirestore = null;
 
     // DOM Elements
-    const titlesInput = document.getElementById("titlesInput");
-    const descriptionsInput = document.getElementById("descriptionsInput");
-    const videosInput = document.getElementById("videosInput");
-    const productUrlInput = document.getElementById("productUrlInput");
-    const counterTitles = document.getElementById("counterTitles");
-    const counterDescriptions = document.getElementById("counterDescriptions");
-    const counterVideos = document.getElementById("counterVideos");
-    const valCountsSummary = document.getElementById("valCountsSummary");
-    const valMessage = document.getElementById("valMessage");
-    const btnOpenPreview = document.getElementById("btnOpenPreview");
-
-    // Modals
-    const previewModal = document.getElementById("previewModal");
-    const previewModalTitle = document.getElementById("previewModalTitle");
-    const previewModalBody = document.getElementById("previewModalBody");
-    const btnClosePreview = document.getElementById("btnClosePreview");
-    const btnCancelPreview = document.getElementById("btnCancelPreview");
-    const btnConfirmPublish = document.getElementById("btnConfirmPublish");
-
-    const deleteModal = document.getElementById("deleteModal");
-    const btnCloseDeleteModal = document.getElementById("btnCloseDeleteModal");
-    const btnCancelDelete = document.getElementById("btnCancelDelete");
-    const btnConfirmDelete = document.getElementById("btnConfirmDelete");
-    const deleteItemDetails = document.getElementById("deleteItemDetails");
-
+    const contentGrid = document.getElementById("contentGrid");
+    const searchInput = document.getElementById("searchInput");
+    const statsCounter = document.getElementById("statsCounter");
     const toastContainer = document.getElementById("toastContainer");
-    const inventoryTableBody = document.getElementById("inventoryTableBody");
 
-    // Initialize Firebase directly without Auth
+    // Initialize Firebase safely
     try {
       if (firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("PASTE_YOUR")) {
-        app = initializeApp(firebaseConfig);
+        const app = initializeApp(firebaseConfig);
         db = getFirestore(app);
+        isFirebaseConfigured = true;
       }
-    } catch (e) {
-      console.error("Firebase init failed:", e);
+    } catch (err) {
+      console.error("Firebase Initialization Error:", err);
     }
 
     // ==========================================
-    // TOAST NOTIFICATIONS
+    // TOAST NOTIFICATION UTILITY
     // ==========================================
     function showToast(message, type = "info", duration = 4000) {
       const toast = document.createElement("div");
       toast.className = `toast ${type}`;
-      const icons = { success: "✓", error: "✕", warning: "⚠", info: "ℹ" };
+      
+      const icons = {
+        success: `✓`,
+        error: `✕`,
+        warning: `⚠`,
+        info: `ℹ`
+      };
+
       toast.innerHTML = `<span>${icons[type] || 'ℹ'}</span> <span>${escapeHtml(message)}</span>`;
       toastContainer.appendChild(toast);
 
       setTimeout(() => {
-        toast.style.transition = "opacity 0.3s ease, transform 0.3s ease";
-        toast.style.opacity = "0";
-        toast.style.transform = "scale(0.95)";
+        toast.style.animation = "fadeOut 0.3s forwards";
         setTimeout(() => toast.remove(), 300);
       }, duration);
     }
 
+    // ==========================================
+    // HELPER FUNCTIONS & FORMATTERS
+    // ==========================================
     function escapeHtml(str) {
       if (!str) return "";
       return String(str)
@@ -954,352 +657,382 @@ const firebaseConfig = {
         .replace(/'/g, "&#039;");
     }
 
-    function isValidHttpUrl(string) {
-      if (!string) return false;
-      try {
-        const url = new URL(string.trim());
-        return url.protocol === "http:" || url.protocol === "https:";
-      } catch (_) {
-        return false;
+    function sanitizeUrl(url) {
+      if (!url) return "#";
+      const trimmed = url.trim();
+      if (/^https?:\/\//i.test(trimmed)) {
+        return trimmed;
       }
+      return "#";
     }
 
-    // ==========================================
-    // LINE PARSING ENGINE
-    // ==========================================
-    function parseLines(rawText) {
-      if (!rawText) return [];
-      return rawText
-        .replace(/\r\n/g, "\n")
-        .replace(/\r/g, "\n")
-        .split("\n")
-        .map(line => line.trim())
-        .filter(line => line.length > 0);
-    }
-
-    // ==========================================
-    // LIVE VALIDATION & COUNTERS
-    // ==========================================
-    function validateFormInputs() {
-      const titles = parseLines(titlesInput.value);
-      const descriptions = parseLines(descriptionsInput.value);
-      const videos = parseLines(videosInput.value);
-      const productUrl = productUrlInput.value.trim();
-
-      counterTitles.textContent = `${titles.length} Titles`;
-      counterDescriptions.textContent = `${descriptions.length} Descriptions`;
-      counterVideos.textContent = `${videos.length} Videos`;
-
-      valCountsSummary.textContent = `${titles.length} Titles • ${descriptions.length} Descriptions • ${videos.length} Videos`;
-
-      if (titles.length === 0 && descriptions.length === 0 && videos.length === 0) {
-        valMessage.className = "val-message empty";
-        valMessage.textContent = "Enter content lines to validate before publishing.";
-        btnOpenPreview.disabled = true;
-        parsedBatchData = [];
-        return;
+    // Clipboard copy with robust fallback
+    async function copyTextToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return true;
+        } catch (err) {
+          console.warn("Clipboard API failed, using fallback textarea:", err);
+        }
       }
 
-      const countMatch = (titles.length === descriptions.length) && (descriptions.length === videos.length) && (titles.length > 0);
+      // Fallback
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
       
-      if (!countMatch) {
-        valMessage.className = "val-message invalid";
-        valMessage.textContent = `⚠ Line mismatch: Titles (${titles.length}), Descriptions (${descriptions.length}), and Videos (${videos.length}) must match.`;
-        btnOpenPreview.disabled = true;
-        parsedBatchData = [];
-        return;
-      }
-
-      if (!isValidHttpUrl(productUrl)) {
-        valMessage.className = "val-message invalid";
-        valMessage.textContent = "⚠ Please enter a valid shared Product URL (http:// or https://).";
-        btnOpenPreview.disabled = true;
-        parsedBatchData = [];
-        return;
-      }
-
-      const invalidVideoIndex = videos.findIndex(url => !isValidHttpUrl(url));
-      if (invalidVideoIndex !== -1) {
-        valMessage.className = "val-message invalid";
-        valMessage.textContent = `⚠ Video URL #${invalidVideoIndex + 1} is invalid. Must start with http:// or https://`;
-        btnOpenPreview.disabled = true;
-        parsedBatchData = [];
-        return;
-      }
-
-      valMessage.className = "val-message valid";
-      valMessage.textContent = `✓ Perfect! Ready to publish ${titles.length} content documents.`;
-      btnOpenPreview.disabled = false;
-
-      parsedBatchData = titles.map((title, i) => ({
-        title: title,
-        description: descriptions[i],
-        videoUrl: videos[i],
-        productUrl: productUrl
-      }));
-    }
-
-    [titlesInput, descriptionsInput, videosInput, productUrlInput].forEach(el => {
-      el.addEventListener("input", validateFormInputs);
-    });
-
-    // ==========================================
-    // PREVIEW MODAL
-    // ==========================================
-    btnOpenPreview.addEventListener("click", () => {
-      if (parsedBatchData.length === 0) return;
-
-      previewModalTitle.textContent = `Ready to Publish (${parsedBatchData.length} Entries)`;
-      previewModalBody.innerHTML = parsedBatchData.map((item, idx) => `
-        <div class="preview-entry-card">
-          <span class="preview-entry-num">Entry #${idx + 1}</span>
-          <div><strong>Title:</strong> ${escapeHtml(item.title)}</div>
-          <div><strong>Description:</strong> ${escapeHtml(item.description)}</div>
-          <div><strong>Video:</strong> <a href="${escapeHtml(item.videoUrl)}" target="_blank" style="color:var(--accent); word-break:break-all;">${escapeHtml(item.videoUrl)}</a></div>
-          <div><strong>Shared Product:</strong> <a href="${escapeHtml(item.productUrl)}" target="_blank" style="color:var(--text-muted); word-break:break-all;">${escapeHtml(item.productUrl)}</a></div>
-        </div>
-      `).join("");
-
-      previewModal.classList.add("open");
-    });
-
-    function closePreviewModal() {
-      previewModal.classList.remove("open");
-    }
-
-    btnClosePreview.addEventListener("click", closePreviewModal);
-    btnCancelPreview.addEventListener("click", closePreviewModal);
-
-    // ==========================================
-    // BATCH PUBLISHING
-    // ==========================================
-    btnConfirmPublish.addEventListener("click", async () => {
-      if (parsedBatchData.length === 0 || !db) {
-        showToast("Database not initialized.", "error");
-        return;
-      }
-
-      btnConfirmPublish.disabled = true;
-      btnConfirmPublish.innerHTML = `
-        <svg class="spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-linecap="round"></circle>
-        </svg>
-        <span>Publishing...</span>
-      `;
-
+      let successful = false;
       try {
-        const batch = writeBatch(db);
-        const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-        const batchId = `BATCH-${dateStr}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
-
-        parsedBatchData.forEach(item => {
-          const newDocRef = doc(collection(db, "contentItems"));
-          batch.set(newDocRef, {
-            title: item.title,
-            description: item.description,
-            videoUrl: item.videoUrl,
-            productUrl: item.productUrl,
-            status: "available",
-            batchId: batchId,
-            createdAt: serverTimestamp(),
-            createdBy: "admin_portal"
-          });
-        });
-
-        await batch.commit();
-
-        showToast(`✓ Successfully published ${parsedBatchData.length} content items.`, "success");
-        
-        // Reset form
-        titlesInput.value = "";
-        descriptionsInput.value = "";
-        videosInput.value = "";
-        productUrlInput.value = "";
-        validateFormInputs();
-        closePreviewModal();
-
+        successful = document.execCommand("copy");
       } catch (err) {
-        console.error("Batch publish error:", err);
-        showToast("Error writing batch to Firestore.", "error");
-      } finally {
-        btnConfirmPublish.disabled = false;
-        btnConfirmPublish.innerHTML = `<span>Publish Batch</span>`;
+        console.error("ExecCommand copy failed:", err);
       }
-    });
-
-    // ==========================================
-    // INVENTORY MANAGEMENT & REAL-TIME LISTENER
-    // ==========================================
-    function setupInventoryListener() {
-      if (!db) return;
-
-      const q = query(collection(db, "contentItems"));
-
-      onSnapshot(q, (snapshot) => {
-        const items = [];
-        snapshot.forEach(docSnap => {
-          items.push({
-            id: docSnap.id,
-            ...docSnap.data()
-          });
-        });
-
-        items.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-        inventoryItems = items;
-
-        updateDashboardStatistics();
-        renderInventoryTable();
-      }, (error) => {
-        console.error("Inventory snapshot error:", error);
-        showToast("Unable to load inventory data.", "error");
-      });
+      textArea.remove();
+      return successful;
     }
 
-    function updateDashboardStatistics() {
-      const total = inventoryItems.length;
-      const available = inventoryItems.filter(i => i.status === "available").length;
-      const claimed = inventoryItems.filter(i => i.status === "claimed").length;
-
-      const startOfTodaySec = Math.floor(new Date().setHours(0, 0, 0, 0) / 1000);
-      const todayCount = inventoryItems.filter(i => (i.createdAt?.seconds || 0) >= startOfTodaySec).length;
-
-      document.getElementById("statTotal").textContent = total;
-      document.getElementById("statAvailable").textContent = available;
-      document.getElementById("statClaimed").textContent = claimed;
-      document.getElementById("statToday").textContent = todayCount;
-
-      document.getElementById("countAll").textContent = total;
-      document.getElementById("countAvailable").textContent = available;
-      document.getElementById("countClaimed").textContent = claimed;
+    // Unique anonymous client device session ID
+    function getClientSessionId() {
+      let id = sessionStorage.getItem("app_client_session_id");
+      if (!id) {
+        id = "anon_" + Math.random().toString(36).substring(2, 12) + "_" + Date.now();
+        sessionStorage.setItem("app_client_session_id", id);
+      }
+      return id;
     }
 
-    function renderInventoryTable() {
-      const filtered = inventoryItems.filter(item => {
-        if (currentFilter === "all") return true;
-        return item.status === currentFilter;
-      });
+    // Format content item for complete clipboard copy
+    function formatCompleteCopyPayload(item) {
+      return `Title:\n${item.title || ''}\n\nDescription:\n${item.description || ''}\n\nVideo:\n${item.videoUrl || ''}\n\nProduct:\n${item.productUrl || ''}`;
+    }
 
-      if (filtered.length === 0) {
-        inventoryTableBody.innerHTML = `
-          <tr>
-            <td colspan="5" style="text-align:center; padding: 2.5rem; color: var(--text-dim);">
-              No content items found in this tab.
-            </td>
-          </tr>
+    // ==========================================
+    // SKELETON & UI RENDERING
+    // ==========================================
+    function renderSkeletons(count = 6) {
+      let skeletonsHtml = "";
+      for (let i = 0; i < count; i++) {
+        skeletonsHtml += `
+          <div class="skeleton-card">
+            <div class="skeleton-line" style="height: 20px; width: 30%;"></div>
+            <div class="skeleton-line" style="height: 28px; width: 90%;"></div>
+            <div class="skeleton-line" style="height: 100px; width: 100%;"></div>
+            <div class="skeleton-line" style="height: 35px; width: 100%;"></div>
+            <div class="skeleton-line" style="height: 48px; width: 100%; margin-top: auto;"></div>
+          </div>
         `;
+      }
+      contentGrid.innerHTML = skeletonsHtml;
+    }
+
+    function renderEmptyState(message = "No content is currently available.", subtext = "Please check back later. When the admin publishes new affiliate content, it will appear here automatically in real time.") {
+      contentGrid.innerHTML = `
+        <div class="state-container" style="grid-column: 1 / -1;">
+          <div class="state-icon">📦</div>
+          <h2 class="state-title">${escapeHtml(message)}</h2>
+          <p class="state-desc">${escapeHtml(subtext)}</p>
+        </div>
+      `;
+      statsCounter.innerHTML = `Available Items: <strong>0</strong>`;
+    }
+
+    function renderUnconfiguredState() {
+      contentGrid.innerHTML = `
+        <div class="state-container" style="grid-column: 1 / -1; border-color: var(--warning);">
+          <div class="state-icon">⚙️</div>
+          <h2 class="state-title">Firebase Configuration Required</h2>
+          <p class="state-desc">Please paste your genuine Firebase project credentials inside the <code>firebaseConfig</code> object in <code>index.html</code> to start listening for live content.</p>
+        </div>
+      `;
+      statsCounter.innerHTML = `Status: <strong style="color:var(--warning)">Not Connected</strong>`;
+    }
+
+    function renderCards(items) {
+      if (!items || items.length === 0) {
+        if (searchInput.value.trim().length > 0) {
+          renderEmptyState("No matching content found", "Try refining your search keyword.");
+        } else {
+          renderEmptyState();
+        }
         return;
       }
 
-      inventoryTableBody.innerHTML = filtered.map(item => {
-        const createdDate = item.createdAt?.seconds 
-          ? new Date(item.createdAt.seconds * 1000).toLocaleString() 
-          : "Just now";
+      statsCounter.innerHTML = `Available Items: <strong>${items.length}</strong>`;
+
+      contentGrid.innerHTML = items.map((item, index) => {
+        const safeVideoUrl = sanitizeUrl(item.videoUrl);
+        const safeProductUrl = sanitizeUrl(item.productUrl);
+        const hasValidVideo = safeVideoUrl !== "#";
+        const hasValidProduct = safeProductUrl !== "#";
 
         return `
-          <tr>
-            <td>
-              <span class="table-status-pill ${item.status || 'available'}">
-                ${item.status || 'available'}
-              </span>
-            </td>
-            <td>
-              <div style="font-weight:600; max-width: 320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-                ${escapeHtml(item.title)}
+          <article class="content-card" id="card-${item.id}" data-id="${item.id}">
+            <div>
+              <div class="card-badge-row">
+                <span class="card-index">Item #${index + 1}</span>
+                <span class="card-time">Available</span>
               </div>
-              <div style="font-size:0.75rem; color:var(--text-dim); max-width: 320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-                ${escapeHtml(item.productUrl)}
+              
+              <h2 class="card-title">${escapeHtml(item.title)}</h2>
+              
+              <div class="card-description">${escapeHtml(item.description)}</div>
+
+              <div class="links-section">
+                <div class="link-row">
+                  <span class="link-label">Video:</span>
+                  ${hasValidVideo ? `
+                    <a href="${safeVideoUrl}" target="_blank" rel="noopener noreferrer" class="link-url-text" title="${safeVideoUrl}">
+                      ${escapeHtml(item.videoUrl)}
+                    </a>
+                  ` : `<span class="link-url-text" style="color:var(--text-dim)">No video provided</span>`}
+                </div>
+                <div class="link-row">
+                  <span class="link-label">Product:</span>
+                  ${hasValidProduct ? `
+                    <a href="${safeProductUrl}" target="_blank" rel="noopener noreferrer" class="link-url-text" title="${safeProductUrl}">
+                      ${escapeHtml(item.productUrl)}
+                    </a>
+                  ` : `<span class="link-url-text" style="color:var(--text-dim)">No product link</span>`}
+                </div>
               </div>
-            </td>
-            <td>
-              <code style="font-size:0.75rem; color:var(--accent);">${escapeHtml(item.batchId || 'N/A')}</code>
-            </td>
-            <td style="font-size:0.8rem; color:var(--text-muted);">${createdDate}</td>
-            <td>
-              <div class="action-btn-group">
-                ${item.status === 'claimed' ? `
-                  <button type="button" class="btn-action-icon restore" data-restore-id="${item.id}" title="Restore to Available">
-                    ↺ Restore
-                  </button>
-                ` : ''}
-                <button type="button" class="btn-action-icon delete" data-delete-id="${item.id}" title="Delete Record">
-                  🗑 Delete
+            </div>
+
+            <div class="card-actions">
+              <!-- Primary Claim & Copy Button -->
+              <button type="button" class="btn-claim" data-claim-id="${item.id}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span>Copy & Claim (Remove)</span>
+              </button>
+
+              <!-- Optional Individual Quick Previews / Field Copies -->
+              <div class="individual-actions">
+                <button type="button" class="btn-sub-copy" data-copy-field="title" data-item-id="${item.id}">
+                  Copy Title
+                </button>
+                <button type="button" class="btn-sub-copy" data-copy-field="description" data-item-id="${item.id}">
+                  Copy Desc
+                </button>
+                <button type="button" class="btn-sub-copy" data-copy-field="videoUrl" data-item-id="${item.id}">
+                  Copy Video
+                </button>
+                <button type="button" class="btn-sub-copy" data-copy-field="productUrl" data-item-id="${item.id}">
+                  Copy Product
                 </button>
               </div>
-            </td>
-          </tr>
+            </div>
+          </article>
         `;
       }).join("");
 
-      attachTableActions();
+      attachCardEventListeners();
     }
 
-    function attachTableActions() {
-      // Delete buttons
-      document.querySelectorAll("[data-delete-id]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const id = btn.getAttribute("data-delete-id");
-          const item = inventoryItems.find(i => i.id === id);
-          if (!item) return;
-
-          pendingDeletionId = id;
-          deleteItemDetails.innerHTML = `<strong>Title:</strong> ${escapeHtml(item.title)}<br><small style="color:var(--text-dim)">ID: ${id}</small>`;
-          deleteModal.classList.add("open");
-        });
-      });
-
-      // Restore buttons
-      document.querySelectorAll("[data-restore-id]").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          const id = btn.getAttribute("data-restore-id");
-          try {
-            await updateDoc(doc(db, "contentItems", id), {
-              status: "available",
-              claimedAt: null,
-              claimedBySession: null
-            });
-            showToast("✓ Item restored to available status.", "success");
-          } catch (err) {
-            console.error("Restore failed:", err);
-            showToast("Failed to restore item.", "error");
-          }
-        });
-      });
-    }
-
-    // Delete Modal Actions
-    function closeDeleteModal() {
-      deleteModal.classList.remove("open");
-      pendingDeletionId = null;
-    }
-
-    btnCloseDeleteModal.addEventListener("click", closeDeleteModal);
-    btnCancelDelete.addEventListener("click", closeDeleteModal);
-
-    btnConfirmDelete.addEventListener("click", async () => {
-      if (!pendingDeletionId || !db) return;
-      try {
-        await deleteDoc(doc(db, "contentItems", pendingDeletionId));
-        showToast("✓ Item permanently deleted.", "success");
-        closeDeleteModal();
-      } catch (err) {
-        console.error("Delete failed:", err);
-        showToast("Unable to delete item.", "error");
+    // ==========================================
+    // ATOMIC CLAIM & CONCURRENCY HANDLER
+    // ==========================================
+    async function handleClaimAndCopy(contentId, buttonElement) {
+      if (!db) {
+        showToast("Database not initialized", "error");
+        return;
       }
-    });
 
-    // Tab Filters
-    document.querySelectorAll(".tab-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        currentFilter = btn.getAttribute("data-filter");
-        renderInventoryTable();
+      // UI Loading state on button
+      const originalButtonContent = buttonElement.innerHTML;
+      buttonElement.disabled = true;
+      buttonElement.innerHTML = `
+        <svg class="spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-linecap="round"></circle>
+        </svg>
+        <span>Verifying & Claiming...</span>
+      `;
+
+      const docRef = doc(db, "contentItems", contentId);
+      const clientSessionId = getClientSessionId();
+
+      try {
+        let claimedData = null;
+
+        // Run atomic Firestore transaction
+        await runTransaction(db, async (transaction) => {
+          const docSnap = await transaction.get(docRef);
+
+          if (!docSnap.exists()) {
+            throw new Error("ALREADY_CLAIMED_OR_DELETED");
+          }
+
+          const data = docSnap.data();
+
+          if (data.status !== "available") {
+            throw new Error("ALREADY_CLAIMED");
+          }
+
+          // Atomically change status
+          transaction.update(docRef, {
+            status: "claimed",
+            claimedAt: serverTimestamp(),
+            claimedBySession: clientSessionId
+          });
+
+          claimedData = data;
+        });
+
+        // If transaction passed: Prepare formatted text & copy to clipboard
+        if (claimedData) {
+          const payload = formatCompleteCopyPayload(claimedData);
+          const copySuccess = await copyTextToClipboard(payload);
+
+          if (copySuccess) {
+            showToast("✓ Claimed & Copied to clipboard!", "success");
+          } else {
+            showToast("✓ Item claimed! Please copy content manually.", "warning");
+          }
+
+          // Optimistically animate removal (onSnapshot will also handle real-time sync)
+          const cardEl = document.getElementById(`card-${contentId}`);
+          if (cardEl) {
+            cardEl.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+            cardEl.style.opacity = "0";
+            cardEl.style.transform = "scale(0.95)";
+            setTimeout(() => {
+              allAvailableItems = allAvailableItems.filter(i => i.id !== contentId);
+              applySearchFilter();
+            }, 300);
+          }
+        }
+
+      } catch (err) {
+        console.error("Claim transaction error:", err);
+        buttonElement.disabled = false;
+        buttonElement.innerHTML = originalButtonContent;
+
+        if (err.message === "ALREADY_CLAIMED" || err.message === "ALREADY_CLAIMED_OR_DELETED") {
+          showToast("⚠ This item was just claimed by another user.", "warning");
+          // Remove from local cache
+          allAvailableItems = allAvailableItems.filter(i => i.id !== contentId);
+          applySearchFilter();
+        } else {
+          showToast("Failed to claim content. Check network connection.", "error");
+        }
+      }
+    }
+
+    // Individual field copier (without claiming/deleting)
+    async function handleFieldCopy(field, itemId) {
+      const item = allAvailableItems.find(i => i.id === itemId);
+      if (!item) return;
+
+      const valueToCopy = item[field] || "";
+      if (!valueToCopy) {
+        showToast(`This item has no ${field}.`, "warning");
+        return;
+      }
+
+      const success = await copyTextToClipboard(valueToCopy);
+      if (success) {
+        showToast(`✓ Copied ${field} to clipboard!`, "success");
+      } else {
+        showToast(`Unable to copy ${field}.`, "error");
+      }
+    }
+
+    // ==========================================
+    // ATTACH DOM LISTENERS
+    // ==========================================
+    function attachCardEventListeners() {
+      // Claim buttons
+      document.querySelectorAll("[data-claim-id]").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const contentId = btn.getAttribute("data-claim-id");
+          handleClaimAndCopy(contentId, btn);
+        });
       });
-    });
 
-    // Initialize Inventory listener on load
+      // Individual field copy buttons
+      document.querySelectorAll("[data-copy-field]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const field = btn.getAttribute("data-copy-field");
+          const itemId = btn.getAttribute("data-item-id");
+          handleFieldCopy(field, itemId);
+        });
+      });
+    }
+
+    // Filter & Search Logic
+    function applySearchFilter() {
+      const queryText = searchInput.value.toLowerCase().trim();
+      if (!queryText) {
+        renderCards(allAvailableItems);
+        return;
+      }
+
+      const filtered = allAvailableItems.filter(item => {
+        const titleMatch = (item.title || "").toLowerCase().includes(queryText);
+        const descMatch = (item.description || "").toLowerCase().includes(queryText);
+        return titleMatch || descMatch;
+      });
+
+      renderCards(filtered);
+    }
+
+    searchInput.addEventListener("input", applySearchFilter);
+
+    // ==========================================
+    // REAL-TIME FIRESTORE LISTENER
+    // ==========================================
+    function setupRealTimeListener() {
+      if (!isFirebaseConfigured || !db) {
+        renderUnconfiguredState();
+        return;
+      }
+
+      renderSkeletons(6);
+
+      const itemsCollection = collection(db, "contentItems");
+      
+      // Query documents where status == 'available'
+      const q = query(
+        itemsCollection,
+        where("status", "==", "available")
+      );
+
+      unsubscribeFirestore = onSnapshot(q, (snapshot) => {
+        const items = [];
+        snapshot.forEach((docSnapshot) => {
+          items.push({
+            id: docSnapshot.id,
+            ...docSnapshot.data()
+          });
+        });
+
+        // Client-side sort by createdAt descending if present
+        items.sort((a, b) => {
+          const timeA = a.createdAt?.seconds || 0;
+          const timeB = b.createdAt?.seconds || 0;
+          return timeB - timeA;
+        });
+
+        allAvailableItems = items;
+        applySearchFilter();
+
+      }, (error) => {
+        console.error("Firestore snapshot error:", error);
+        showToast("Error connecting to real-time database.", "error");
+        renderEmptyState("Database Connection Error", "Unable to fetch content items. Verify Firestore security rules or connection.");
+      });
+    }
+
+    // App Initialization
     document.addEventListener("DOMContentLoaded", () => {
-      setupInventoryListener();
+      setupRealTimeListener();
     });
   </script>
 </body>
