@@ -1,599 +1,868 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Admin Panel — Bulk Publish Content</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Admin Dashboard — Affiliate Content Publisher</title>
 
-<style>
-:root {
-  --bg: #0b0c10;
-  --bg-elevated: #131620;
-  --surface: #171a26;
-  --surface-hover: #1d2130;
-  --border: #262b3d;
-  --border-strong: #333a52;
+  <!-- Google Fonts: Inter & Noto Sans Bengali -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-  --text: #eef0f6;
-  --text-dim: #9aa0b4;
-  --text-faint: #6b7186;
+  <style>
+    /* =====================================================
+       DESIGN SYSTEM & CSS VARIABLES
+       ===================================================== */
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: rgba(79, 70, 229, 0.12);
+      --accent: #06b6d4;
+      --bg-page: #0b0f19;
+      --bg-surface: #151d30;
+      --bg-surface-elevated: #1e293b;
+      --bg-input: #0d1322;
+      --border-subtle: #243049;
+      --border-focus: #6366f1;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.12);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.12);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.12);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+      --font-family: 'Inter', 'Noto Sans Bengali', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --transition-smooth: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-  --accent: #6d8bff;
-  --accent-strong: #4f6de0;
-  --accent-soft: rgba(109, 139, 255, 0.12);
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  --success: #2fd480;
-  --success-soft: rgba(47, 212, 128, 0.14);
-  --warning: #f5b544;
-  --warning-soft: rgba(245, 181, 68, 0.14);
-  --danger: #ff5c72;
-  --danger-soft: rgba(255, 92, 114, 0.14);
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-  --radius-lg: 18px;
-  --radius-md: 12px;
-  --radius-sm: 8px;
+    .admin-container {
+      width: 100%;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 4rem 1.25rem;
+      flex: 1;
+    }
 
-  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 20px 40px -24px rgba(0, 0, 0, 0.6);
-  --shadow-elevated: 0 10px 30px -12px rgba(0, 0, 0, 0.5);
+    /* Header */
+    header.admin-header {
+      background-color: rgba(21, 29, 48, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
 
-  --font-latin: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-bengali: 'Hind Siliguri', 'Inter', -apple-system, sans-serif;
-}
+    .header-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0.9rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
 
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
 
-body {
-  background:
-    radial-gradient(1100px 500px at 15% -10%, rgba(109, 139, 255, 0.10), transparent 60%),
-    radial-gradient(900px 500px at 100% 0%, rgba(47, 212, 128, 0.06), transparent 55%),
-    var(--bg);
-  color: var(--text);
-  font-family: var(--font-bengali);
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-}
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #fff;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+    }
 
-a { color: var(--accent); }
+    .brand-text h1 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+    }
 
-/* ---------- Topbar ---------- */
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 30;
-  backdrop-filter: blur(14px);
-  background: rgba(11, 12, 16, 0.72);
-  border-bottom: 1px solid var(--border);
-}
+    .brand-text p {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
 
-.topbar-inner {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--success-bg);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--success);
+    }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-latin);
-  font-weight: 800;
-  font-size: 17px;
-  letter-spacing: -0.01em;
-}
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      background-color: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: pulse 2s infinite;
+    }
 
-.brand-mark { color: var(--accent); font-size: 15px; }
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
 
-.brand-tag {
-  font-family: var(--font-latin);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-dim);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 6px 12px;
-  border-radius: 999px;
-}
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
 
-/* ---------- Layout ---------- */
-.main { padding: 28px 16px 140px; }
-.container { max-width: 960px; margin: 0 auto; }
+    @media (min-width: 900px) {
+      .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
 
-.intro {
-  font-family: var(--font-latin);
-  color: var(--text-dim);
-  font-size: 14px;
-  line-height: 1.6;
-  margin: 0 0 22px;
-  max-width: 640px;
-}
+    .stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
 
-/* ---------- Section card ---------- */
-.section-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
-  padding: 22px;
-  margin-bottom: 18px;
-}
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
-.section-title {
-  font-family: var(--font-latin);
-  font-weight: 700;
-  font-size: 15px;
-  margin: 0 0 4px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+    .stat-val {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+    }
 
-.section-sub {
-  font-family: var(--font-latin);
-  font-size: 12.5px;
-  color: var(--text-faint);
-  margin: 0 0 16px;
-}
+    .stat-sub {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
 
-label.field-label {
-  display: block;
-  font-family: var(--font-latin);
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-faint);
-  margin-bottom: 8px;
-}
+    /* Form Section */
+    .section-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 2.5rem;
+    }
 
-textarea, input[type="text"], input[type="url"] {
-  width: 100%;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  color: var(--text);
-  font-family: var(--font-bengali);
-  font-size: 14px;
-  line-height: 1.6;
-  padding: 12px 14px;
-  resize: vertical;
-  transition: border-color 0.15s ease;
-}
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      margin-bottom: 1.5rem;
+    }
 
-textarea:focus, input:focus {
-  outline: none;
-  border-color: var(--accent);
-}
+    .section-header h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
 
-textarea { min-height: 150px; }
+    .section-header p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
 
-.field-block { margin-bottom: 18px; }
-.field-block:last-child { margin-bottom: 0; }
+    .bulk-form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
 
-.counter-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 8px;
-  font-family: var(--font-latin);
-  font-size: 12.5px;
-}
+    @media (min-width: 960px) {
+      .bulk-form-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
 
-.counter-badge {
-  color: var(--text-dim);
-  font-weight: 600;
-}
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
 
-/* ---------- Grid for the two-column fields ---------- */
-.two-col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
+    .textarea-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.4rem;
+    }
 
-/* ---------- Validation banner ---------- */
-.validation-banner {
-  font-family: var(--font-latin);
-  font-size: 13.5px;
-  font-weight: 600;
-  padding: 12px 16px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-strong);
-  background: var(--bg-elevated);
-  color: var(--text-dim);
-  margin-bottom: 18px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+    .textarea-header label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
 
-.validation-banner.is-ready {
-  color: var(--success);
-  border-color: var(--success);
-  background: linear-gradient(0deg, var(--success-soft), var(--success-soft)), var(--bg-elevated);
-}
+    .line-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      background: var(--bg-surface-elevated);
+      color: var(--accent);
+      border: 1px solid var(--border-subtle);
+    }
 
-.validation-banner.is-blocked {
-  color: var(--warning);
-  border-color: var(--warning);
-  background: linear-gradient(0deg, var(--warning-soft), var(--warning-soft)), var(--bg-elevated);
-}
+    .bulk-textarea {
+      width: 100%;
+      height: 220px;
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.85rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-family: var(--font-family);
+      resize: vertical;
+      outline: none;
+      line-height: 1.55;
+      transition: var(--transition-smooth);
+      white-space: pre;
+    }
 
-/* ---------- Buttons ---------- */
-.btn {
-  font-family: var(--font-latin);
-  font-weight: 700;
-  font-size: 14px;
-  border: none;
-  border-radius: var(--radius-md);
-  padding: 12px 20px;
-  cursor: pointer;
-  transition: transform 0.12s ease, background 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
-}
+    .bulk-textarea:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
 
-.btn:active { transform: scale(0.97); }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .form-input {
+      width: 100%;
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.75rem 0.9rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.92rem;
+      font-family: inherit;
+      outline: none;
+      transition: var(--transition-smooth);
+    }
 
-.btn-primary {
-  background: linear-gradient(180deg, var(--accent), var(--accent-strong));
-  color: #fff;
-  box-shadow: 0 8px 20px -10px rgba(109, 139, 255, 0.6);
-}
+    .form-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
 
-.btn-primary:hover:not(:disabled) {
-  box-shadow: 0 10px 24px -8px rgba(109, 139, 255, 0.75);
-}
+    .product-url-row {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
 
-.btn-secondary {
-  background: var(--surface);
-  color: var(--text);
-  border: 1px solid var(--border-strong);
-}
+    /* Validation Bar */
+    .validation-status-bar {
+      margin-top: 1.5rem;
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+    }
 
-.btn-secondary:hover { background: var(--surface-hover); }
+    @media (min-width: 640px) {
+      .validation-status-bar {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
 
-.btn-block { width: 100%; }
+    .val-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
 
-/* ---------- Preview ---------- */
-.preview-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+    .val-counts-summary {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
 
-.preview-item {
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
-}
+    .val-message {
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
 
-.preview-item-head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
+    .val-message.valid { color: var(--success); }
+    .val-message.invalid { color: var(--warning); }
+    .val-message.empty { color: var(--text-dim); }
 
-.preview-num {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
-  font-family: var(--font-latin);
-  font-size: 11px;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: #fff;
+      border: none;
+      padding: 0.85rem 1.25rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: var(--transition-smooth);
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+    }
 
-.preview-item-title {
-  font-family: var(--font-latin);
-  font-weight: 700;
-  font-size: 13px;
-  color: var(--text-dim);
-}
+    .btn-primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #5b52f3, #4338ca);
+      transform: translateY(-1px);
+    }
 
-.preview-field {
-  font-size: 13.5px;
-  line-height: 1.6;
-  margin: 0 0 8px;
-  word-break: break-word;
-  white-space: pre-wrap;
-}
+    .btn-primary:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
 
-.preview-field:last-child { margin-bottom: 0; }
+    /* Inventory Table */
+    .inventory-toolbar {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
 
-.preview-field-label {
-  font-family: var(--font-latin);
-  font-size: 10.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-faint);
-  display: block;
-  margin-bottom: 2px;
-}
+    @media (min-width: 640px) {
+      .inventory-toolbar {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
 
-.preview-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 18px;
-  flex-wrap: wrap;
-}
+    .tab-group {
+      display: inline-flex;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 3px;
+      gap: 2px;
+    }
 
-.preview-actions .btn { flex: 1; min-width: 140px; }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.45rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
 
-/* ---------- Sticky publish bar ---------- */
-.sticky-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 30;
-  background: rgba(11, 12, 16, 0.85);
-  backdrop-filter: blur(14px);
-  border-top: 1px solid var(--border);
-  padding: 14px 16px;
-}
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+    }
 
-.sticky-bar-inner {
-  max-width: 960px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  flex-wrap: wrap;
-}
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      background: var(--bg-input);
+    }
 
-.sticky-status {
-  font-family: var(--font-latin);
-  font-size: 13px;
-  color: var(--text-dim);
-  font-weight: 600;
-}
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.85rem;
+      min-width: 800px;
+    }
 
-/* ---------- Toasts ---------- */
-.toast-container {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 50;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-  width: 100%;
-  padding: 0 16px;
-  pointer-events: none;
-}
+    table.data-table th {
+      background: var(--bg-surface-elevated);
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
-.toast {
-  font-family: var(--font-latin);
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--text);
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-strong);
-  box-shadow: var(--shadow-elevated);
-  padding: 12px 18px;
-  border-radius: 999px;
-  max-width: 460px;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(-8px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
+    table.data-table td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
 
-.toast--visible { opacity: 1; transform: translateY(0); }
+    table.data-table tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
 
-.toast--success { border-color: var(--success); background: linear-gradient(0deg, var(--success-soft), var(--success-soft)), var(--bg-elevated); }
-.toast--warning { border-color: var(--warning); background: linear-gradient(0deg, var(--warning-soft), var(--warning-soft)), var(--bg-elevated); }
-.toast--error   { border-color: var(--danger);  background: linear-gradient(0deg, var(--danger-soft), var(--danger-soft)), var(--bg-elevated); }
+    .table-status-pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
 
-/* ---------- Modal (confirm before publish) ---------- */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(5, 6, 9, 0.72);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 60;
-  padding: 20px;
-}
+    .table-status-pill.available {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
 
-.modal-overlay[hidden] { display: none; }
+    .table-status-pill.claimed {
+      background: var(--warning-bg);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
 
-.modal-box {
-  background: var(--surface);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-elevated);
-  padding: 24px;
-  max-width: 420px;
-  width: 100%;
-  text-align: center;
-}
+    .action-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
 
-.modal-box h3 {
-  font-family: var(--font-latin);
-  margin: 0 0 8px;
-  font-size: 17px;
-}
+    .btn-action-icon {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
 
-.modal-box p {
-  font-family: var(--font-latin);
-  color: var(--text-dim);
-  font-size: 13.5px;
-  line-height: 1.6;
-  margin: 0 0 20px;
-}
+    .btn-action-icon:hover {
+      color: #fff;
+      border-color: var(--border-focus);
+    }
 
-.modal-actions {
-  display: flex;
-  gap: 10px;
-}
+    .btn-action-icon.restore:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
 
-.modal-actions .btn { flex: 1; }
+    .btn-action-icon.delete:hover {
+      background: var(--danger);
+      border-color: var(--danger);
+      color: #fff;
+    }
 
-/* ---------- Responsive ---------- */
-@media (max-width: 640px) {
-  .two-col { grid-template-columns: 1fr; }
-  .topbar-inner { padding: 14px 16px; }
-  .main { padding: 20px 12px 150px; }
-  .section-card { padding: 16px; }
-  .sticky-bar-inner { flex-direction: column; align-items: stretch; }
-  .sticky-bar-inner .btn-block-mobile { width: 100%; }
-}
-</style>
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 150;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 780px;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-card);
+      animation: modalScale 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes modalScale {
+      from { transform: scale(0.94); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .btn-close-modal {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      background: rgba(13, 19, 34, 0.5);
+    }
+
+    .preview-entry-card {
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    .preview-entry-num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .btn-secondary {
+      background: var(--bg-surface-elevated);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-secondary:hover {
+      background: #334155;
+      color: #fff;
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+      max-width: 90vw;
+    }
+
+    .toast {
+      pointer-events: auto;
+      background: #1e293b;
+      color: #fff;
+      padding: 0.9rem 1.2rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      font-size: 0.88rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-left: 4px solid var(--primary);
+    }
+
+    .toast.success { border-left-color: var(--success); }
+    .toast.error { border-left-color: var(--danger); }
+    .toast.warning { border-left-color: var(--warning); }
+
+    .spin {
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  </style>
 </head>
 <body>
 
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <span class="brand-mark">◆</span>
-        <span class="brand-name">Content Hub — Admin</span>
+  <!-- ADMIN HEADER -->
+  <header class="admin-header">
+    <div class="header-inner">
+      <div class="brand-group">
+        <div class="brand-logo">A</div>
+        <div class="brand-text">
+          <h1>Admin Control Panel</h1>
+          <p>Bulk Publisher & Distribution Manager</p>
+        </div>
       </div>
-      <div class="brand-tag" id="total-available-tag">— available now</div>
+      <div class="status-badge">
+        <span class="pulse-dot"></span>
+        <span>Connected</span>
+      </div>
     </div>
   </header>
 
-  <main class="main">
-    <div class="container">
-      <p class="intro">
-        Paste one title per line, one description per line, and one video URL per line —
-        line 1 of each becomes Entry 1, line 2 becomes Entry 2, and so on. The Product URL
-        below is shared across every entry in this batch.
-      </p>
+  <!-- MAIN CONTAINER -->
+  <main class="admin-container">
+    
+    <!-- STATS CARDS -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">Total Available</span>
+        <span class="stat-val" id="statAvailable" style="color:var(--success)">0</span>
+        <span class="stat-sub">Ready for user claims</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Claimed Content</span>
+        <span class="stat-val" id="statClaimed" style="color:var(--warning)">0</span>
+        <span class="stat-sub">Consumed by users</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Published Today</span>
+        <span class="stat-val" id="statToday">0</span>
+        <span class="stat-sub">Uploaded in last 24h</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Total Published</span>
+        <span class="stat-val" id="statTotal" style="color:var(--accent)">0</span>
+        <span class="stat-sub">Lifetime content items</span>
+      </div>
+    </section>
 
-      <!-- ===================================================== -->
-      <!-- BULK INPUT -->
-      <!-- ===================================================== -->
-      <div class="section-card">
-        <h2 class="section-title">📦 Bulk Content Upload</h2>
-        <p class="section-sub">Up to 10 entries per batch. Empty trailing lines are ignored automatically.</p>
-
-        <div class="field-block">
-          <label class="field-label" for="titles-input">Titles (one per line)</label>
-          <textarea id="titles-input" placeholder="Enter one title per line..."></textarea>
-          <div class="counter-row">
-            <span class="counter-badge" id="titles-count">Titles: 0</span>
-          </div>
-        </div>
-
-        <div class="field-block">
-          <label class="field-label" for="descriptions-input">Descriptions (one per line)</label>
-          <textarea id="descriptions-input" placeholder="Enter one description per line..."></textarea>
-          <div class="counter-row">
-            <span class="counter-badge" id="descriptions-count">Descriptions: 0</span>
-          </div>
-        </div>
-
-        <div class="field-block">
-          <label class="field-label" for="videos-input">Video URLs (one per line)</label>
-          <textarea id="videos-input" placeholder="Enter one video URL per line..."></textarea>
-          <div class="counter-row">
-            <span class="counter-badge" id="videos-count">Videos: 0</span>
-          </div>
-        </div>
-
-        <div class="field-block">
-          <label class="field-label" for="product-url-input">Product URL (shared by all entries)</label>
-          <input type="url" id="product-url-input" placeholder="https://example.com/product">
-          <div class="counter-row">
-            <span class="counter-badge">Applies to every entry in this batch</span>
-          </div>
-        </div>
-
-        <div id="validation-banner" class="validation-banner">
-          Start typing to see how many entries will be created.
-        </div>
-
-        <button id="preview-btn" class="btn btn-primary btn-block" disabled>Preview Entries</button>
+    <!-- BULK PUBLISHER FORM -->
+    <section class="section-card">
+      <div class="section-header">
+        <h2>Bulk Content Publisher</h2>
+        <p>Paste multiple titles, descriptions, and video URLs (one per line). All entries are matched line-by-line and associated with the single Product URL.</p>
       </div>
 
-      <!-- ===================================================== -->
-      <!-- PREVIEW -->
-      <!-- ===================================================== -->
-      <div class="section-card" id="preview-section" hidden>
-        <h2 class="section-title">👀 Ready to Publish</h2>
-        <p class="section-sub" id="preview-sub">Review each entry before it's written to Firestore.</p>
-        <div id="preview-list" class="preview-list"></div>
-        <div class="preview-actions">
-          <button id="cancel-preview-btn" class="btn btn-secondary">Cancel</button>
-          <button id="publish-btn" class="btn btn-primary" id="publish-btn">Publish Entries</button>
+      <form id="bulkPublishForm" onsubmit="return false;">
+        <div class="bulk-form-grid">
+          
+          <!-- Column 1: Titles -->
+          <div class="form-group">
+            <div class="textarea-header">
+              <label for="titlesInput">Titles (One per line)</label>
+              <span class="line-pill" id="counterTitles">0 Titles</span>
+            </div>
+            <textarea id="titlesInput" class="bulk-textarea" placeholder="Enter one title per line...&#10;চুল পড়া কি সত্যিই বন্ধ করা সম্ভব? 😱&#10;মাত্র ৩০ দিনে নতুন চুল!"></textarea>
+          </div>
+
+          <!-- Column 2: Descriptions -->
+          <div class="form-group">
+            <div class="textarea-header">
+              <label for="descriptionsInput">Descriptions (One per line)</label>
+              <span class="line-pill" id="counterDescriptions">0 Descriptions</span>
+            </div>
+            <textarea id="descriptionsInput" class="bulk-textarea" placeholder="Enter one description per line...&#10;HAIR VITA তেলের গোপন ফর্মুলা! #HairVita&#10;Hair Vita Nourishing Hair Oil ব্যবহার করুন!"></textarea>
+          </div>
+
+          <!-- Column 3: Video URLs -->
+          <div class="form-group">
+            <div class="textarea-header">
+              <label for="videosInput">Video URLs (One per line)</label>
+              <span class="line-pill" id="counterVideos">0 Videos</span>
+            </div>
+            <textarea id="videosInput" class="bulk-textarea" placeholder="Enter one video URL per line...&#10;https://youtube.com/watch?v=...&#10;https://tiktok.com/@video/..."></textarea>
+          </div>
+
+        </div>
+
+        <!-- Shared Product URL -->
+        <div class="product-url-row">
+          <label for="productUrlInput" style="font-size:0.85rem; font-weight:600;">Shared Product URL (Applies to all entries in this batch)</label>
+          <input type="url" id="productUrlInput" class="form-input" placeholder="https://example.com/product/hair-vita-oil" required />
+        </div>
+
+        <!-- Live Validation Status Bar -->
+        <div class="validation-status-bar">
+          <div class="val-details">
+            <span class="val-counts-summary" id="valCountsSummary">0 Titles • 0 Descriptions • 0 Videos</span>
+            <span class="val-message empty" id="valMessage">Enter content lines to validate before publishing.</span>
+          </div>
+          <button type="button" class="btn-primary" id="btnOpenPreview" disabled>
+            <span>Preview & Publish</span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- INVENTORY TABLE -->
+    <section class="section-card">
+      <div class="inventory-toolbar">
+        <div>
+          <h2>Real-Time Content Inventory</h2>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Live feed of all items in Firestore. Restore claimed entries or permanently delete items.</p>
+        </div>
+        <div class="tab-group">
+          <button type="button" class="tab-btn active" data-filter="all">All (<span id="countAll">0</span>)</button>
+          <button type="button" class="tab-btn" data-filter="available">Available (<span id="countAvailable">0</span>)</button>
+          <button type="button" class="tab-btn" data-filter="claimed">Claimed (<span id="countClaimed">0</span>)</button>
         </div>
       </div>
 
-    </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Title</th>
+              <th>Batch ID</th>
+              <th>Created Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryTableBody">
+            <tr>
+              <td colspan="5" style="text-align:center; padding: 3rem; color: var(--text-dim);">
+                Loading inventory items...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
   </main>
 
-  <!-- ===================================================== -->
-  <!-- STICKY STATUS BAR -->
-  <!-- ===================================================== -->
-  <div class="sticky-bar">
-    <div class="sticky-bar-inner">
-      <span class="sticky-status" id="sticky-status">No entries staged yet</span>
-      <button id="clear-btn" class="btn btn-secondary">Clear Form</button>
-    </div>
-  </div>
-
-  <!-- ===================================================== -->
-  <!-- CONFIRM MODAL -->
-  <!-- ===================================================== -->
-  <div class="modal-overlay" id="confirm-modal" hidden>
+  <!-- PREVIEW MODAL -->
+  <div class="modal-backdrop" id="previewModal">
     <div class="modal-box">
-      <h3 id="confirm-title">Publish these entries?</h3>
-      <p id="confirm-body">This will create new documents in Firestore, visible to the User Panel immediately.</p>
-      <div class="modal-actions">
-        <button id="confirm-cancel-btn" class="btn btn-secondary">Cancel</button>
-        <button id="confirm-ok-btn" class="btn btn-primary">Yes, Publish</button>
+      <div class="modal-header">
+        <h3 id="previewModalTitle">Ready to Publish (0 Entries)</h3>
+        <button type="button" class="btn-close-modal" id="btnClosePreview">&times;</button>
+      </div>
+      <div class="modal-body" id="previewModalBody">
+        <!-- Preview list items rendered here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" id="btnCancelPreview">Cancel</button>
+        <button type="button" class="btn-primary" id="btnConfirmPublish">
+          <span>Publish Batch</span>
+        </button>
       </div>
     </div>
   </div>
 
-  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+  <!-- DELETE CONFIRMATION MODAL -->
+  <div class="modal-backdrop" id="deleteModal">
+    <div class="modal-box" style="max-width: 460px;">
+      <div class="modal-header">
+        <h3>Confirm Permanent Deletion</h3>
+        <button type="button" class="btn-close-modal" id="btnCloseDeleteModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.9rem; color:var(--text-muted);">
+          Are you sure you want to permanently delete this content item from Firestore?
+        </p>
+        <div id="deleteItemDetails" style="background:var(--bg-input); padding:0.8rem; border-radius:var(--radius-sm); font-size:0.85rem; border:1px solid var(--border-subtle); margin-top:0.5rem;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" id="btnCancelDelete">Cancel</button>
+        <button type="button" class="btn-primary" id="btnConfirmDelete" style="background:var(--danger);">
+          <span>Delete Item</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  doc,
-  writeBatch,
-  query,
-  where,
-  onSnapshot,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+  <!-- TOAST NOTIFICATIONS -->
+  <div class="toast-container" id="toastContainer" aria-live="assertive"></div>
 
-// =====================================================
-// 🔥 FIREBASE CONFIGURATION — PASTE YOUR FIREBASE
-// CONSOLE CONFIG HERE
-// =====================================================
-//
-// 1. Go to https://console.firebase.google.com
-// 2. Open your project → Project settings → General
-// 3. Scroll to "Your apps" → select your Web app
-// 4. Copy the firebaseConfig object shown there and
-//    paste the values below, replacing every placeholder.
-//
-// This MUST be the exact same config used in user-panel.html
-// so both panels read/write the same Firestore project.
-// =====================================================
+  <!-- FIREBASE MODULAR SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { 
+      getFirestore, 
+      collection, 
+      doc, 
+      writeBatch, 
+      query, 
+      onSnapshot, 
+      deleteDoc, 
+      updateDoc, 
+      serverTimestamp 
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // =====================================================
+    // 🔥 FIREBASE CONFIGURATION — PASTE YOUR FIREBASE
+    // CONSOLE CONFIG HERE
+    // =====================================================
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -606,373 +875,432 @@ const firebaseConfig = {
   measurementId: "G-RE17Y3VGL2"
 };
 
-// Firestore collection name — must match user-panel.html exactly.
-const CONTENT_COLLECTION = "contentItems";
+    // =====================================================
+    // END FIREBASE CONFIGURATION
+    // =====================================================
 
-// Batch size ceiling (matches "up to 10 entries" requirement)
-const MAX_ENTRIES = 10;
+    // State Variables
+    let app = null;
+    let db = null;
+    let inventoryItems = [];
+    let currentFilter = "all";
+    let pendingDeletionId = null;
+    let parsedBatchData = [];
 
-// Sensible length limits — validation only, never silently truncated.
-const MAX_TITLE_LEN = 300;
-const MAX_DESCRIPTION_LEN = 2000;
-const MAX_URL_LEN = 2000;
+    // DOM Elements
+    const titlesInput = document.getElementById("titlesInput");
+    const descriptionsInput = document.getElementById("descriptionsInput");
+    const videosInput = document.getElementById("videosInput");
+    const productUrlInput = document.getElementById("productUrlInput");
+    const counterTitles = document.getElementById("counterTitles");
+    const counterDescriptions = document.getElementById("counterDescriptions");
+    const counterVideos = document.getElementById("counterVideos");
+    const valCountsSummary = document.getElementById("valCountsSummary");
+    const valMessage = document.getElementById("valMessage");
+    const btnOpenPreview = document.getElementById("btnOpenPreview");
 
-// =====================================================
-// END FIREBASE CONFIGURATION
-// =====================================================
+    // Modals
+    const previewModal = document.getElementById("previewModal");
+    const previewModalTitle = document.getElementById("previewModalTitle");
+    const previewModalBody = document.getElementById("previewModalBody");
+    const btnClosePreview = document.getElementById("btnClosePreview");
+    const btnCancelPreview = document.getElementById("btnCancelPreview");
+    const btnConfirmPublish = document.getElementById("btnConfirmPublish");
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+    const deleteModal = document.getElementById("deleteModal");
+    const btnCloseDeleteModal = document.getElementById("btnCloseDeleteModal");
+    const btnCancelDelete = document.getElementById("btnCancelDelete");
+    const btnConfirmDelete = document.getElementById("btnConfirmDelete");
+    const deleteItemDetails = document.getElementById("deleteItemDetails");
 
-// ---------- DOM references ----------
-const titlesInput = document.getElementById("titles-input");
-const descriptionsInput = document.getElementById("descriptions-input");
-const videosInput = document.getElementById("videos-input");
-const productUrlInput = document.getElementById("product-url-input");
+    const toastContainer = document.getElementById("toastContainer");
+    const inventoryTableBody = document.getElementById("inventoryTableBody");
 
-const titlesCount = document.getElementById("titles-count");
-const descriptionsCount = document.getElementById("descriptions-count");
-const videosCount = document.getElementById("videos-count");
+    // Initialize Firebase directly without Auth
+    try {
+      if (firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("PASTE_YOUR")) {
+        app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+      }
+    } catch (e) {
+      console.error("Firebase init failed:", e);
+    }
 
-const validationBanner = document.getElementById("validation-banner");
-const previewBtn = document.getElementById("preview-btn");
+    // ==========================================
+    // TOAST NOTIFICATIONS
+    // ==========================================
+    function showToast(message, type = "info", duration = 4000) {
+      const toast = document.createElement("div");
+      toast.className = `toast ${type}`;
+      const icons = { success: "✓", error: "✕", warning: "⚠", info: "ℹ" };
+      toast.innerHTML = `<span>${icons[type] || 'ℹ'}</span> <span>${escapeHtml(message)}</span>`;
+      toastContainer.appendChild(toast);
 
-const previewSection = document.getElementById("preview-section");
-const previewSub = document.getElementById("preview-sub");
-const previewList = document.getElementById("preview-list");
-const cancelPreviewBtn = document.getElementById("cancel-preview-btn");
-const publishBtn = document.getElementById("publish-btn");
+      setTimeout(() => {
+        toast.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+        toast.style.opacity = "0";
+        toast.style.transform = "scale(0.95)";
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
+    }
 
-const clearBtn = document.getElementById("clear-btn");
-const stickyStatus = document.getElementById("sticky-status");
-const totalAvailableTag = document.getElementById("total-available-tag");
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
 
-const confirmModal = document.getElementById("confirm-modal");
-const confirmBody = document.getElementById("confirm-body");
-const confirmCancelBtn = document.getElementById("confirm-cancel-btn");
-const confirmOkBtn = document.getElementById("confirm-ok-btn");
+    function isValidHttpUrl(string) {
+      if (!string) return false;
+      try {
+        const url = new URL(string.trim());
+        return url.protocol === "http:" || url.protocol === "https:";
+      } catch (_) {
+        return false;
+      }
+    }
 
-const toastContainer = document.getElementById("toast-container");
+    // ==========================================
+    // LINE PARSING ENGINE
+    // ==========================================
+    function parseLines(rawText) {
+      if (!rawText) return [];
+      return rawText
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .split("\n")
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+    }
 
-let stagedEntries = [];
-let isPublishing = false;
+    // ==========================================
+    // LIVE VALIDATION & COUNTERS
+    // ==========================================
+    function validateFormInputs() {
+      const titles = parseLines(titlesInput.value);
+      const descriptions = parseLines(descriptionsInput.value);
+      const videos = parseLines(videosInput.value);
+      const productUrl = productUrlInput.value.trim();
 
-// ---------- Toasts ----------
-function showToast(message, type = "info") {
-  const toast = document.createElement("div");
-  toast.className = `toast toast--${type}`;
-  toast.textContent = message;
-  toastContainer.appendChild(toast);
-  requestAnimationFrame(() => toast.classList.add("toast--visible"));
-  setTimeout(() => {
-    toast.classList.remove("toast--visible");
-    toast.addEventListener("transitionend", () => toast.remove(), { once: true });
-  }, 3800);
-}
+      counterTitles.textContent = `${titles.length} Titles`;
+      counterDescriptions.textContent = `${descriptions.length} Descriptions`;
+      counterVideos.textContent = `${videos.length} Videos`;
 
-// ---------- Robust line parsing ----------
-// Normalizes line endings, trims each line, strips a leading list marker
-// (e.g. "1. ", "2) ", "- ", "• ") that people naturally paste in when
-// copying a numbered/bulleted list, and drops fully empty lines —
-// while preserving Bengali text, emojis, hashtags, and punctuation.
-const LIST_MARKER_PATTERN = /^(?:\d+[\.\)]|[-*•])\s+/;
+      valCountsSummary.textContent = `${titles.length} Titles • ${descriptions.length} Descriptions • ${videos.length} Videos`;
 
-function stripListMarker(line) {
-  return line.replace(LIST_MARKER_PATTERN, "").trim();
-}
+      if (titles.length === 0 && descriptions.length === 0 && videos.length === 0) {
+        valMessage.className = "val-message empty";
+        valMessage.textContent = "Enter content lines to validate before publishing.";
+        btnOpenPreview.disabled = true;
+        parsedBatchData = [];
+        return;
+      }
 
-function parseLines(rawText) {
-  return rawText
-    .replace(/\r\n/g, "\n")
-    .replace(/\r/g, "\n")
-    .split("\n")
-    .map((line) => line.trim())
-    .map(stripListMarker)
-    .filter((line) => line.length > 0);
-}
+      const countMatch = (titles.length === descriptions.length) && (descriptions.length === videos.length) && (titles.length > 0);
+      
+      if (!countMatch) {
+        valMessage.className = "val-message invalid";
+        valMessage.textContent = `⚠ Line mismatch: Titles (${titles.length}), Descriptions (${descriptions.length}), and Videos (${videos.length}) must match.`;
+        btnOpenPreview.disabled = true;
+        parsedBatchData = [];
+        return;
+      }
 
-function isValidHttpUrl(value) {
-  try {
-    const u = new URL(value);
-    return u.protocol === "http:" || u.protocol === "https:";
-  } catch {
-    return false;
-  }
-}
+      if (!isValidHttpUrl(productUrl)) {
+        valMessage.className = "val-message invalid";
+        valMessage.textContent = "⚠ Please enter a valid shared Product URL (http:// or https://).";
+        btnOpenPreview.disabled = true;
+        parsedBatchData = [];
+        return;
+      }
 
-// ---------- Live validation ----------
-function getCurrentLines() {
-  return {
-    titles: parseLines(titlesInput.value),
-    descriptions: parseLines(descriptionsInput.value),
-    videos: parseLines(videosInput.value),
-    productUrl: stripListMarker(productUrlInput.value.trim())
-  };
-}
+      const invalidVideoIndex = videos.findIndex(url => !isValidHttpUrl(url));
+      if (invalidVideoIndex !== -1) {
+        valMessage.className = "val-message invalid";
+        valMessage.textContent = `⚠ Video URL #${invalidVideoIndex + 1} is invalid. Must start with http:// or https://`;
+        btnOpenPreview.disabled = true;
+        parsedBatchData = [];
+        return;
+      }
 
-function validateAndUpdateBanner() {
-  const { titles, descriptions, videos, productUrl } = getCurrentLines();
+      valMessage.className = "val-message valid";
+      valMessage.textContent = `✓ Perfect! Ready to publish ${titles.length} content documents.`;
+      btnOpenPreview.disabled = false;
 
-  titlesCount.textContent = `Titles: ${titles.length}`;
-  descriptionsCount.textContent = `Descriptions: ${descriptions.length}`;
-  videosCount.textContent = `Videos: ${videos.length}`;
+      parsedBatchData = titles.map((title, i) => ({
+        title: title,
+        description: descriptions[i],
+        videoUrl: videos[i],
+        productUrl: productUrl
+      }));
+    }
 
-  validationBanner.classList.remove("is-ready", "is-blocked");
+    [titlesInput, descriptionsInput, videosInput, productUrlInput].forEach(el => {
+      el.addEventListener("input", validateFormInputs);
+    });
 
-  if (titles.length === 0 && descriptions.length === 0 && videos.length === 0) {
-    validationBanner.textContent = "Start typing to see how many entries will be created.";
-    previewBtn.disabled = true;
-    return null;
-  }
+    // ==========================================
+    // PREVIEW MODAL
+    // ==========================================
+    btnOpenPreview.addEventListener("click", () => {
+      if (parsedBatchData.length === 0) return;
 
-  const counts = [titles.length, descriptions.length, videos.length];
-  const countsMatch = counts.every((c) => c === counts[0]);
+      previewModalTitle.textContent = `Ready to Publish (${parsedBatchData.length} Entries)`;
+      previewModalBody.innerHTML = parsedBatchData.map((item, idx) => `
+        <div class="preview-entry-card">
+          <span class="preview-entry-num">Entry #${idx + 1}</span>
+          <div><strong>Title:</strong> ${escapeHtml(item.title)}</div>
+          <div><strong>Description:</strong> ${escapeHtml(item.description)}</div>
+          <div><strong>Video:</strong> <a href="${escapeHtml(item.videoUrl)}" target="_blank" style="color:var(--accent); word-break:break-all;">${escapeHtml(item.videoUrl)}</a></div>
+          <div><strong>Shared Product:</strong> <a href="${escapeHtml(item.productUrl)}" target="_blank" style="color:var(--text-muted); word-break:break-all;">${escapeHtml(item.productUrl)}</a></div>
+        </div>
+      `).join("");
 
-  if (!countsMatch) {
-    validationBanner.classList.add("is-blocked");
-    validationBanner.textContent =
-      `⚠ ${titles.length} Titles • ${descriptions.length} Descriptions • ${videos.length} Videos — ` +
-      `these must all match before you can publish.`;
-    previewBtn.disabled = true;
-    return null;
-  }
+      previewModal.classList.add("open");
+    });
 
-  const entryCount = titles.length;
+    function closePreviewModal() {
+      previewModal.classList.remove("open");
+    }
 
-  if (entryCount === 0) {
-    validationBanner.textContent = "Add at least one title, description, and video URL.";
-    previewBtn.disabled = true;
-    return null;
-  }
+    btnClosePreview.addEventListener("click", closePreviewModal);
+    btnCancelPreview.addEventListener("click", closePreviewModal);
 
-  if (entryCount > MAX_ENTRIES) {
-    validationBanner.classList.add("is-blocked");
-    validationBanner.textContent = `⚠ Maximum ${MAX_ENTRIES} entries per batch — you currently have ${entryCount}.`;
-    previewBtn.disabled = true;
-    return null;
-  }
+    // ==========================================
+    // BATCH PUBLISHING
+    // ==========================================
+    btnConfirmPublish.addEventListener("click", async () => {
+      if (parsedBatchData.length === 0 || !db) {
+        showToast("Database not initialized.", "error");
+        return;
+      }
 
-  if (!productUrl) {
-    validationBanner.classList.add("is-blocked");
-    validationBanner.textContent = "⚠ Add a Product URL — it's required and shared across all entries.";
-    previewBtn.disabled = true;
-    return null;
-  }
+      btnConfirmPublish.disabled = true;
+      btnConfirmPublish.innerHTML = `
+        <svg class="spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-linecap="round"></circle>
+        </svg>
+        <span>Publishing...</span>
+      `;
 
-  if (!isValidHttpUrl(productUrl)) {
-    validationBanner.classList.add("is-blocked");
-    validationBanner.textContent = "⚠ Product URL must be a valid http:// or https:// link.";
-    previewBtn.disabled = true;
-    return null;
-  }
+      try {
+        const batch = writeBatch(db);
+        const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+        const batchId = `BATCH-${dateStr}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
 
-  const invalidVideoIndex = videos.findIndex((v) => !isValidHttpUrl(v));
-  if (invalidVideoIndex !== -1) {
-    validationBanner.classList.add("is-blocked");
-    validationBanner.textContent = `⚠ Video URL on line ${invalidVideoIndex + 1} is not a valid http:// or https:// link.`;
-    previewBtn.disabled = true;
-    return null;
-  }
+        parsedBatchData.forEach(item => {
+          const newDocRef = doc(collection(db, "contentItems"));
+          batch.set(newDocRef, {
+            title: item.title,
+            description: item.description,
+            videoUrl: item.videoUrl,
+            productUrl: item.productUrl,
+            status: "available",
+            batchId: batchId,
+            createdAt: serverTimestamp(),
+            createdBy: "admin_portal"
+          });
+        });
 
-  const tooLongTitleIndex = titles.findIndex((t) => t.length > MAX_TITLE_LEN);
-  if (tooLongTitleIndex !== -1) {
-    validationBanner.classList.add("is-blocked");
-    validationBanner.textContent = `⚠ Title on line ${tooLongTitleIndex + 1} exceeds ${MAX_TITLE_LEN} characters.`;
-    previewBtn.disabled = true;
-    return null;
-  }
+        await batch.commit();
 
-  const tooLongDescIndex = descriptions.findIndex((d) => d.length > MAX_DESCRIPTION_LEN);
-  if (tooLongDescIndex !== -1) {
-    validationBanner.classList.add("is-blocked");
-    validationBanner.textContent = `⚠ Description on line ${tooLongDescIndex + 1} exceeds ${MAX_DESCRIPTION_LEN} characters.`;
-    previewBtn.disabled = true;
-    return null;
-  }
+        showToast(`✓ Successfully published ${parsedBatchData.length} content items.`, "success");
+        
+        // Reset form
+        titlesInput.value = "";
+        descriptionsInput.value = "";
+        videosInput.value = "";
+        productUrlInput.value = "";
+        validateFormInputs();
+        closePreviewModal();
 
-  if (productUrl.length > MAX_URL_LEN) {
-    validationBanner.classList.add("is-blocked");
-    validationBanner.textContent = "⚠ Product URL is too long.";
-    previewBtn.disabled = true;
-    return null;
-  }
+      } catch (err) {
+        console.error("Batch publish error:", err);
+        showToast("Error writing batch to Firestore.", "error");
+      } finally {
+        btnConfirmPublish.disabled = false;
+        btnConfirmPublish.innerHTML = `<span>Publish Batch</span>`;
+      }
+    });
 
-  validationBanner.classList.add("is-ready");
-  validationBanner.textContent = `✓ Ready to publish ${entryCount} ${entryCount === 1 ? "entry" : "entries"}`;
-  previewBtn.disabled = false;
+    // ==========================================
+    // INVENTORY MANAGEMENT & REAL-TIME LISTENER
+    // ==========================================
+    function setupInventoryListener() {
+      if (!db) return;
 
-  return { titles, descriptions, videos, productUrl, entryCount };
-}
+      const q = query(collection(db, "contentItems"));
 
-[titlesInput, descriptionsInput, videosInput, productUrlInput].forEach((el) => {
-  el.addEventListener("input", validateAndUpdateBanner);
-});
+      onSnapshot(q, (snapshot) => {
+        const items = [];
+        snapshot.forEach(docSnap => {
+          items.push({
+            id: docSnap.id,
+            ...docSnap.data()
+          });
+        });
 
-// ---------- Preview ----------
-function buildEntriesFromValidation(validated) {
-  const { titles, descriptions, videos, productUrl } = validated;
-  return titles.map((title, i) => ({
-    title,
-    description: descriptions[i],
-    videoUrl: videos[i],
-    productUrl
-  }));
-}
+        items.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+        inventoryItems = items;
 
-function renderPreview(entries) {
-  previewList.innerHTML = "";
-  previewSub.textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} will be created — index-matched line by line.`;
+        updateDashboardStatistics();
+        renderInventoryTable();
+      }, (error) => {
+        console.error("Inventory snapshot error:", error);
+        showToast("Unable to load inventory data.", "error");
+      });
+    }
 
-  entries.forEach((entry, i) => {
-    const item = document.createElement("div");
-    item.className = "preview-item";
-    item.innerHTML = `
-      <div class="preview-item-head">
-        <span class="preview-num">${i + 1}</span>
-        <span class="preview-item-title">Entry ${i + 1}</span>
-      </div>
-      <p class="preview-field"><span class="preview-field-label">Title</span></p>
-      <p class="preview-field"><span class="preview-field-label">Description</span></p>
-      <p class="preview-field"><span class="preview-field-label">Video</span></p>
-      <p class="preview-field"><span class="preview-field-label">Product</span></p>
-    `;
-    // Set text via textContent to avoid any HTML injection from pasted content
-    const fields = item.querySelectorAll(".preview-field");
-    fields[0].appendChild(document.createTextNode(entry.title));
-    fields[1].appendChild(document.createTextNode(entry.description));
-    fields[2].appendChild(document.createTextNode(entry.videoUrl));
-    fields[3].appendChild(document.createTextNode(entry.productUrl));
-    previewList.appendChild(item);
-  });
-}
+    function updateDashboardStatistics() {
+      const total = inventoryItems.length;
+      const available = inventoryItems.filter(i => i.status === "available").length;
+      const claimed = inventoryItems.filter(i => i.status === "claimed").length;
 
-previewBtn.addEventListener("click", () => {
-  const validated = validateAndUpdateBanner();
-  if (!validated) return;
+      const startOfTodaySec = Math.floor(new Date().setHours(0, 0, 0, 0) / 1000);
+      const todayCount = inventoryItems.filter(i => (i.createdAt?.seconds || 0) >= startOfTodaySec).length;
 
-  stagedEntries = buildEntriesFromValidation(validated);
-  renderPreview(stagedEntries);
-  previewSection.hidden = false;
-  previewSection.scrollIntoView({ behavior: "smooth", block: "start" });
-  stickyStatus.textContent = `${stagedEntries.length} ${stagedEntries.length === 1 ? "entry" : "entries"} staged for publishing`;
-});
+      document.getElementById("statTotal").textContent = total;
+      document.getElementById("statAvailable").textContent = available;
+      document.getElementById("statClaimed").textContent = claimed;
+      document.getElementById("statToday").textContent = todayCount;
 
-cancelPreviewBtn.addEventListener("click", () => {
-  previewSection.hidden = true;
-  stagedEntries = [];
-  stickyStatus.textContent = "No entries staged yet";
-});
+      document.getElementById("countAll").textContent = total;
+      document.getElementById("countAvailable").textContent = available;
+      document.getElementById("countClaimed").textContent = claimed;
+    }
 
-// ---------- Confirm modal ----------
-function openConfirmModal() {
-  confirmBody.textContent =
-    `This will create ${stagedEntries.length} new document(s) in Firestore and make them ` +
-    `immediately visible to anyone using the User Panel. This can't be undone from here.`;
-  confirmModal.hidden = false;
-}
-function closeConfirmModal() {
-  confirmModal.hidden = true;
-}
+    function renderInventoryTable() {
+      const filtered = inventoryItems.filter(item => {
+        if (currentFilter === "all") return true;
+        return item.status === currentFilter;
+      });
 
-publishBtn.addEventListener("click", () => {
-  if (stagedEntries.length === 0 || isPublishing) return;
-  openConfirmModal();
-});
+      if (filtered.length === 0) {
+        inventoryTableBody.innerHTML = `
+          <tr>
+            <td colspan="5" style="text-align:center; padding: 2.5rem; color: var(--text-dim);">
+              No content items found in this tab.
+            </td>
+          </tr>
+        `;
+        return;
+      }
 
-confirmCancelBtn.addEventListener("click", closeConfirmModal);
-confirmModal.addEventListener("click", (e) => {
-  if (e.target === confirmModal) closeConfirmModal();
-});
+      inventoryTableBody.innerHTML = filtered.map(item => {
+        const createdDate = item.createdAt?.seconds 
+          ? new Date(item.createdAt.seconds * 1000).toLocaleString() 
+          : "Just now";
 
-confirmOkBtn.addEventListener("click", async () => {
-  closeConfirmModal();
-  await publishEntries();
-});
+        return `
+          <tr>
+            <td>
+              <span class="table-status-pill ${item.status || 'available'}">
+                ${item.status || 'available'}
+              </span>
+            </td>
+            <td>
+              <div style="font-weight:600; max-width: 320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                ${escapeHtml(item.title)}
+              </div>
+              <div style="font-size:0.75rem; color:var(--text-dim); max-width: 320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                ${escapeHtml(item.productUrl)}
+              </div>
+            </td>
+            <td>
+              <code style="font-size:0.75rem; color:var(--accent);">${escapeHtml(item.batchId || 'N/A')}</code>
+            </td>
+            <td style="font-size:0.8rem; color:var(--text-muted);">${createdDate}</td>
+            <td>
+              <div class="action-btn-group">
+                ${item.status === 'claimed' ? `
+                  <button type="button" class="btn-action-icon restore" data-restore-id="${item.id}" title="Restore to Available">
+                    ↺ Restore
+                  </button>
+                ` : ''}
+                <button type="button" class="btn-action-icon delete" data-delete-id="${item.id}" title="Delete Record">
+                  🗑 Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
 
-// ---------- Publish (batched write) ----------
-async function publishEntries() {
-  if (isPublishing || stagedEntries.length === 0) return;
-  isPublishing = true;
+      attachTableActions();
+    }
 
-  publishBtn.disabled = true;
-  previewBtn.disabled = true;
-  publishBtn.textContent = "Publishing…";
+    function attachTableActions() {
+      // Delete buttons
+      document.querySelectorAll("[data-delete-id]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-delete-id");
+          const item = inventoryItems.find(i => i.id === id);
+          if (!item) return;
 
-  const batchId = `BATCH-${new Date().toISOString().replace(/[-:TZ.]/g, "").slice(0, 14)}`;
+          pendingDeletionId = id;
+          deleteItemDetails.innerHTML = `<strong>Title:</strong> ${escapeHtml(item.title)}<br><small style="color:var(--text-dim)">ID: ${id}</small>`;
+          deleteModal.classList.add("open");
+        });
+      });
 
-  try {
-    const batch = writeBatch(db);
+      // Restore buttons
+      document.querySelectorAll("[data-restore-id]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const id = btn.getAttribute("data-restore-id");
+          try {
+            await updateDoc(doc(db, "contentItems", id), {
+              status: "available",
+              claimedAt: null,
+              claimedBySession: null
+            });
+            showToast("✓ Item restored to available status.", "success");
+          } catch (err) {
+            console.error("Restore failed:", err);
+            showToast("Failed to restore item.", "error");
+          }
+        });
+      });
+    }
 
-    stagedEntries.forEach((entry) => {
-      const docRef = doc(collection(db, CONTENT_COLLECTION));
-      batch.set(docRef, {
-        title: entry.title,
-        description: entry.description,
-        videoUrl: entry.videoUrl,
-        productUrl: entry.productUrl,
-        status: "available",
-        batchId,
-        createdAt: serverTimestamp()
+    // Delete Modal Actions
+    function closeDeleteModal() {
+      deleteModal.classList.remove("open");
+      pendingDeletionId = null;
+    }
+
+    btnCloseDeleteModal.addEventListener("click", closeDeleteModal);
+    btnCancelDelete.addEventListener("click", closeDeleteModal);
+
+    btnConfirmDelete.addEventListener("click", async () => {
+      if (!pendingDeletionId || !db) return;
+      try {
+        await deleteDoc(doc(db, "contentItems", pendingDeletionId));
+        showToast("✓ Item permanently deleted.", "success");
+        closeDeleteModal();
+      } catch (err) {
+        console.error("Delete failed:", err);
+        showToast("Unable to delete item.", "error");
+      }
+    });
+
+    // Tab Filters
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentFilter = btn.getAttribute("data-filter");
+        renderInventoryTable();
       });
     });
 
-    await batch.commit();
-
-    showToast(`✓ Successfully published ${stagedEntries.length} content item(s).`, "success");
-
-    // Reset form completely
-    titlesInput.value = "";
-    descriptionsInput.value = "";
-    videosInput.value = "";
-    productUrlInput.value = "";
-    stagedEntries = [];
-    previewSection.hidden = true;
-    validateAndUpdateBanner();
-    stickyStatus.textContent = "No entries staged yet";
-  } catch (err) {
-    console.error(err);
-    const friendly =
-      err.code === "permission-denied"
-        ? "Permission denied by Firestore security rules."
-        : "Unable to publish right now. Please check your connection and try again.";
-    showToast("⚠ " + friendly, "error");
-  } finally {
-    isPublishing = false;
-    publishBtn.disabled = false;
-    previewBtn.disabled = false;
-    publishBtn.textContent = "Publish Entries";
-  }
-}
-
-// ---------- Clear form ----------
-clearBtn.addEventListener("click", () => {
-  titlesInput.value = "";
-  descriptionsInput.value = "";
-  videosInput.value = "";
-  productUrlInput.value = "";
-  stagedEntries = [];
-  previewSection.hidden = true;
-  validateAndUpdateBanner();
-  stickyStatus.textContent = "No entries staged yet";
-});
-
-// ---------- Live "available now" counter (read-only visibility) ----------
-function startAvailableCounter() {
-  const q = query(collection(db, CONTENT_COLLECTION), where("status", "==", "available"));
-  onSnapshot(
-    q,
-    (snapshot) => {
-      totalAvailableTag.textContent = `${snapshot.size} available now`;
-    },
-    (err) => {
-      console.error(err);
-      totalAvailableTag.textContent = "— available now";
-    }
-  );
-}
-
-startAvailableCounter();
-validateAndUpdateBanner();
-</script>
+    // Initialize Inventory listener on load
+    document.addEventListener("DOMContentLoaded", () => {
+      setupInventoryListener();
+    });
+  </script>
 </body>
 </html>
