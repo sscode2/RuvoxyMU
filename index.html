@@ -39,7 +39,6 @@
       --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Reset & Base */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
@@ -58,7 +57,6 @@
       flex-direction: column;
     }
 
-    /* Containers */
     .app-container {
       width: 100%;
       max-width: 1200px;
@@ -206,7 +204,7 @@
       color: var(--text-main);
     }
 
-    /* Grid Layout */
+    /* Cards Grid */
     .cards-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -292,7 +290,6 @@
       overflow-y: auto;
     }
 
-    /* Scrollbar for Description */
     .card-description::-webkit-scrollbar {
       width: 4px;
     }
@@ -301,7 +298,6 @@
       border-radius: 4px;
     }
 
-    /* Video & Product URL sections */
     .links-section {
       display: flex;
       flex-direction: column;
@@ -342,7 +338,7 @@
       text-decoration: underline;
     }
 
-    /* Buttons */
+    /* Actions */
     .card-actions {
       display: flex;
       flex-direction: column;
@@ -435,7 +431,7 @@
       100% { background-position: -200% 0; }
     }
 
-    /* Empty and Error State */
+    /* States */
     .state-container {
       text-align: center;
       padding: 5rem 1.5rem;
@@ -465,7 +461,7 @@
       margin: 0 auto;
     }
 
-    /* Toast Notification */
+    /* Toasts */
     .toast-container {
       position: fixed;
       bottom: 24px;
@@ -504,12 +500,6 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
-    @keyframes fadeOut {
-      from { opacity: 1; transform: scale(1); }
-      to { opacity: 0; transform: scale(0.95); }
-    }
-
-    /* Spin icon */
     .spin {
       animation: spin 1s linear infinite;
     }
@@ -537,7 +527,7 @@
     </div>
   </header>
 
-  <!-- Main User Area -->
+  <!-- Main Content Area -->
   <main class="app-container">
     
     <!-- Controls (Search & Counters) -->
@@ -554,17 +544,17 @@
       </div>
     </section>
 
-    <!-- Content Items Grid -->
+    <!-- Cards Grid -->
     <section id="contentGrid" class="cards-grid" aria-live="polite">
-      <!-- Loading skeleton items rendered here via JS -->
+      <!-- Loading skeletons rendered here -->
     </section>
 
   </main>
 
-  <!-- Global Toast Notifications Stack -->
+  <!-- Toast Notification Container -->
   <div class="toast-container" id="toastContainer" aria-live="assertive"></div>
 
-  <!-- Firebase Modular SDK & Application Logic -->
+  <!-- Firebase Modular SDK & User Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { 
@@ -572,7 +562,6 @@
       collection, 
       query, 
       where, 
-      orderBy, 
       onSnapshot, 
       runTransaction, 
       doc, 
@@ -583,6 +572,7 @@
     // 🔥 FIREBASE CONFIGURATION — PASTE YOUR FIREBASE
     // CONSOLE CONFIG HERE
     // =====================================================
+
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBbHi-Kwq9gJ_20QNrlqY4RkSVRVPZSAMM",
@@ -602,7 +592,6 @@ const firebaseConfig = {
     let db = null;
     let allAvailableItems = [];
     let isFirebaseConfigured = false;
-    let unsubscribeFirestore = null;
 
     // DOM Elements
     const contentGrid = document.getElementById("contentGrid");
@@ -610,7 +599,7 @@ const firebaseConfig = {
     const statsCounter = document.getElementById("statsCounter");
     const toastContainer = document.getElementById("toastContainer");
 
-    // Initialize Firebase safely
+    // Initialize Firebase
     try {
       if (firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("PASTE_YOUR")) {
         const app = initializeApp(firebaseConfig);
@@ -618,35 +607,28 @@ const firebaseConfig = {
         isFirebaseConfigured = true;
       }
     } catch (err) {
-      console.error("Firebase Initialization Error:", err);
+      console.error("Firebase Init Failed:", err);
     }
 
     // ==========================================
-    // TOAST NOTIFICATION UTILITY
+    // TOAST NOTIFICATIONS
     // ==========================================
     function showToast(message, type = "info", duration = 4000) {
       const toast = document.createElement("div");
       toast.className = `toast ${type}`;
       
-      const icons = {
-        success: `✓`,
-        error: `✕`,
-        warning: `⚠`,
-        info: `ℹ`
-      };
-
+      const icons = { success: "✓", error: "✕", warning: "⚠", info: "ℹ" };
       toast.innerHTML = `<span>${icons[type] || 'ℹ'}</span> <span>${escapeHtml(message)}</span>`;
       toastContainer.appendChild(toast);
 
       setTimeout(() => {
-        toast.style.animation = "fadeOut 0.3s forwards";
+        toast.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+        toast.style.opacity = "0";
+        toast.style.transform = "scale(0.95)";
         setTimeout(() => toast.remove(), 300);
       }, duration);
     }
 
-    // ==========================================
-    // HELPER FUNCTIONS & FORMATTERS
-    // ==========================================
     function escapeHtml(str) {
       if (!str) return "";
       return String(str)
@@ -660,24 +642,21 @@ const firebaseConfig = {
     function sanitizeUrl(url) {
       if (!url) return "#";
       const trimmed = url.trim();
-      if (/^https?:\/\//i.test(trimmed)) {
-        return trimmed;
-      }
+      if (/^https?:\/\//i.test(trimmed)) return trimmed;
       return "#";
     }
 
-    // Clipboard copy with robust fallback
+    // Clipboard API with legacy fallback
     async function copyTextToClipboard(text) {
       if (navigator.clipboard && window.isSecureContext) {
         try {
           await navigator.clipboard.writeText(text);
           return true;
         } catch (err) {
-          console.warn("Clipboard API failed, using fallback textarea:", err);
+          console.warn("Clipboard API failed, trying fallback:", err);
         }
       }
 
-      // Fallback
       const textArea = document.createElement("textarea");
       textArea.value = text;
       textArea.style.position = "fixed";
@@ -697,7 +676,6 @@ const firebaseConfig = {
       return successful;
     }
 
-    // Unique anonymous client device session ID
     function getClientSessionId() {
       let id = sessionStorage.getItem("app_client_session_id");
       if (!id) {
@@ -707,13 +685,12 @@ const firebaseConfig = {
       return id;
     }
 
-    // Format content item for complete clipboard copy
     function formatCompleteCopyPayload(item) {
       return `Title:\n${item.title || ''}\n\nDescription:\n${item.description || ''}\n\nVideo:\n${item.videoUrl || ''}\n\nProduct:\n${item.productUrl || ''}`;
     }
 
     // ==========================================
-    // SKELETON & UI RENDERING
+    // SKELETONS & RENDERING
     // ==========================================
     function renderSkeletons(count = 6) {
       let skeletonsHtml = "";
@@ -731,7 +708,7 @@ const firebaseConfig = {
       contentGrid.innerHTML = skeletonsHtml;
     }
 
-    function renderEmptyState(message = "No content is currently available.", subtext = "Please check back later. When the admin publishes new affiliate content, it will appear here automatically in real time.") {
+    function renderEmptyState(message = "No content is currently available.", subtext = "When new affiliate content is published from the Admin Panel, it will appear here instantly.") {
       contentGrid.innerHTML = `
         <div class="state-container" style="grid-column: 1 / -1;">
           <div class="state-icon">📦</div>
@@ -747,7 +724,7 @@ const firebaseConfig = {
         <div class="state-container" style="grid-column: 1 / -1; border-color: var(--warning);">
           <div class="state-icon">⚙️</div>
           <h2 class="state-title">Firebase Configuration Required</h2>
-          <p class="state-desc">Please paste your genuine Firebase project credentials inside the <code>firebaseConfig</code> object in <code>index.html</code> to start listening for live content.</p>
+          <p class="state-desc">Paste your Firebase project credentials in the <code>firebaseConfig</code> object inside <code>index.html</code> to connect.</p>
         </div>
       `;
       statsCounter.innerHTML = `Status: <strong style="color:var(--warning)">Not Connected</strong>`;
@@ -756,7 +733,7 @@ const firebaseConfig = {
     function renderCards(items) {
       if (!items || items.length === 0) {
         if (searchInput.value.trim().length > 0) {
-          renderEmptyState("No matching content found", "Try refining your search keyword.");
+          renderEmptyState("No matching content found", "Try searching with different keywords.");
         } else {
           renderEmptyState();
         }
@@ -804,7 +781,7 @@ const firebaseConfig = {
             </div>
 
             <div class="card-actions">
-              <!-- Primary Claim & Copy Button -->
+              <!-- Primary Atomic Claim & Copy -->
               <button type="button" class="btn-claim" data-claim-id="${item.id}">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -813,7 +790,7 @@ const firebaseConfig = {
                 <span>Copy & Claim (Remove)</span>
               </button>
 
-              <!-- Optional Individual Quick Previews / Field Copies -->
+              <!-- Optional Individual Copies -->
               <div class="individual-actions">
                 <button type="button" class="btn-sub-copy" data-copy-field="title" data-item-id="${item.id}">
                   Copy Title
@@ -837,7 +814,7 @@ const firebaseConfig = {
     }
 
     // ==========================================
-    // ATOMIC CLAIM & CONCURRENCY HANDLER
+    // ATOMIC CLAIM WITH FIRESTORE TRANSACTION
     // ==========================================
     async function handleClaimAndCopy(contentId, buttonElement) {
       if (!db) {
@@ -845,14 +822,13 @@ const firebaseConfig = {
         return;
       }
 
-      // UI Loading state on button
       const originalButtonContent = buttonElement.innerHTML;
       buttonElement.disabled = true;
       buttonElement.innerHTML = `
         <svg class="spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-linecap="round"></circle>
         </svg>
-        <span>Verifying & Claiming...</span>
+        <span>Claiming & Copying...</span>
       `;
 
       const docRef = doc(db, "contentItems", contentId);
@@ -861,7 +837,7 @@ const firebaseConfig = {
       try {
         let claimedData = null;
 
-        // Run atomic Firestore transaction
+        // Atomic Transaction: Prevents race conditions between multiple users
         await runTransaction(db, async (transaction) => {
           const docSnap = await transaction.get(docRef);
 
@@ -875,7 +851,6 @@ const firebaseConfig = {
             throw new Error("ALREADY_CLAIMED");
           }
 
-          // Atomically change status
           transaction.update(docRef, {
             status: "claimed",
             claimedAt: serverTimestamp(),
@@ -885,18 +860,18 @@ const firebaseConfig = {
           claimedData = data;
         });
 
-        // If transaction passed: Prepare formatted text & copy to clipboard
+        // Copy formatted content payload to clipboard
         if (claimedData) {
           const payload = formatCompleteCopyPayload(claimedData);
           const copySuccess = await copyTextToClipboard(payload);
 
           if (copySuccess) {
-            showToast("✓ Claimed & Copied to clipboard!", "success");
+            showToast("✓ Copied all details & claimed!", "success");
           } else {
-            showToast("✓ Item claimed! Please copy content manually.", "warning");
+            showToast("✓ Claimed! Please copy content manually.", "warning");
           }
 
-          // Optimistically animate removal (onSnapshot will also handle real-time sync)
+          // Smoothly remove card from UI
           const cardEl = document.getElementById(`card-${contentId}`);
           if (cardEl) {
             cardEl.style.transition = "transform 0.3s ease, opacity 0.3s ease";
@@ -916,16 +891,14 @@ const firebaseConfig = {
 
         if (err.message === "ALREADY_CLAIMED" || err.message === "ALREADY_CLAIMED_OR_DELETED") {
           showToast("⚠ This item was just claimed by another user.", "warning");
-          // Remove from local cache
           allAvailableItems = allAvailableItems.filter(i => i.id !== contentId);
           applySearchFilter();
         } else {
-          showToast("Failed to claim content. Check network connection.", "error");
+          showToast("Failed to claim content. Check internet connection.", "error");
         }
       }
     }
 
-    // Individual field copier (without claiming/deleting)
     async function handleFieldCopy(field, itemId) {
       const item = allAvailableItems.find(i => i.id === itemId);
       if (!item) return;
@@ -944,19 +917,14 @@ const firebaseConfig = {
       }
     }
 
-    // ==========================================
-    // ATTACH DOM LISTENERS
-    // ==========================================
     function attachCardEventListeners() {
-      // Claim buttons
       document.querySelectorAll("[data-claim-id]").forEach(btn => {
-        btn.addEventListener("click", (e) => {
+        btn.addEventListener("click", () => {
           const contentId = btn.getAttribute("data-claim-id");
           handleClaimAndCopy(contentId, btn);
         });
       });
 
-      // Individual field copy buttons
       document.querySelectorAll("[data-copy-field]").forEach(btn => {
         btn.addEventListener("click", () => {
           const field = btn.getAttribute("data-copy-field");
@@ -966,7 +934,6 @@ const firebaseConfig = {
       });
     }
 
-    // Filter & Search Logic
     function applySearchFilter() {
       const queryText = searchInput.value.toLowerCase().trim();
       if (!queryText) {
@@ -997,14 +964,9 @@ const firebaseConfig = {
       renderSkeletons(6);
 
       const itemsCollection = collection(db, "contentItems");
-      
-      // Query documents where status == 'available'
-      const q = query(
-        itemsCollection,
-        where("status", "==", "available")
-      );
+      const q = query(itemsCollection, where("status", "==", "available"));
 
-      unsubscribeFirestore = onSnapshot(q, (snapshot) => {
+      onSnapshot(q, (snapshot) => {
         const items = [];
         snapshot.forEach((docSnapshot) => {
           items.push({
@@ -1013,7 +975,7 @@ const firebaseConfig = {
           });
         });
 
-        // Client-side sort by createdAt descending if present
+        // Sort descending by creation date
         items.sort((a, b) => {
           const timeA = a.createdAt?.seconds || 0;
           const timeB = b.createdAt?.seconds || 0;
@@ -1026,11 +988,10 @@ const firebaseConfig = {
       }, (error) => {
         console.error("Firestore snapshot error:", error);
         showToast("Error connecting to real-time database.", "error");
-        renderEmptyState("Database Connection Error", "Unable to fetch content items. Verify Firestore security rules or connection.");
+        renderEmptyState("Database Connection Error", "Unable to fetch content items. Check Firestore security rules.");
       });
     }
 
-    // App Initialization
     document.addEventListener("DOMContentLoaded", () => {
       setupRealTimeListener();
     });
