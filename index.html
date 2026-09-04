@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Content Hub — Available Entries</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0b0c10;
+  --bg-elevated: #131620;
+  --surface: #171a26;
+  --surface-hover: #1d2130;
+  --border: #262b3d;
+  --border-strong: #333a52;
+
+  --text: #eef0f6;
+  --text-dim: #9aa0b4;
+  --text-faint: #6b7186;
+
+  --accent: #6d8bff;
+  --accent-strong: #4f6de0;
+  --accent-soft: rgba(109, 139, 255, 0.12);
+
+  --success: #2fd480;
+  --success-soft: rgba(47, 212, 128, 0.14);
+  --warning: #f5b544;
+  --warning-soft: rgba(245, 181, 68, 0.14);
+  --danger: #ff5c72;
+  --danger-soft: rgba(255, 92, 114, 0.14);
+
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 20px 40px -24px rgba(0, 0, 0, 0.6);
+  --shadow-elevated: 0 10px 30px -12px rgba(0, 0, 0, 0.5);
+
+  --font-latin: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-bengali: 'Hind Siliguri', 'Inter', -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  background:
+    radial-gradient(1100px 500px at 15% -10%, rgba(109, 139, 255, 0.10), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(47, 212, 128, 0.06), transparent 55%),
+    var(--bg);
+  color: var(--text);
+  font-family: var(--font-bengali);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+a { color: var(--accent); }
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(14px);
+  background: rgba(11, 12, 16, 0.72);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-latin);
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+
+.brand-mark { color: var(--accent); font-size: 15px; }
+
+.live-count {
+  font-family: var(--font-latin);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.main { padding: 28px 16px 80px; }
+.container { max-width: 1080px; margin: 0 auto; }
+
+.state-panel {
+  text-align: center;
+  padding: 90px 20px;
+  color: var(--text-dim);
+  font-family: var(--font-latin);
+}
+
+.state-panel h2 { color: var(--text); font-size: 18px; margin: 0 0 8px; }
+.state-panel p { margin: 0 auto; max-width: 380px; font-size: 14px; line-height: 1.6; }
+.state-icon { font-size: 44px; margin-bottom: 14px; }
+.state-panel--error h2 { color: var(--danger); }
+
+.spinner {
+  width: 34px;
+  height: 34px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.btn {
+  font-family: var(--font-latin);
+  font-weight: 600;
+  font-size: 13px;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.15s ease, opacity 0.15s ease;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  margin-top: 16px;
+}
+
+.btn-secondary:hover { background: var(--surface-hover); }
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+.card--busy { opacity: 0.7; }
+.card--removed { opacity: 0; transform: scale(0.96); pointer-events: none; }
+
+.card-inner {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field { min-width: 0; }
+
+.field-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.field-label {
+  font-family: var(--font-latin);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+
+.field-value {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--text);
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.field-link {
+  display: block;
+  text-decoration: none;
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
+.field-link:hover { text-decoration: underline; }
+
+.icon-copy-btn {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--text-dim);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
+}
+
+.icon-copy-btn:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+.icon-copy-btn:active { transform: scale(0.92); }
+
+.claim-btn {
+  margin-top: 4px;
+  width: 100%;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 13px 16px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+  color: #fff;
+  font-family: var(--font-latin);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px -10px rgba(109, 139, 255, 0.6);
+  transition: transform 0.12s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+}
+
+.claim-btn:hover { box-shadow: 0 10px 24px -8px rgba(109, 139, 255, 0.75); }
+.claim-btn:active { transform: scale(0.98); }
+.claim-btn:disabled { opacity: 0.65; cursor: not-allowed; box-shadow: none; }
+
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  padding: 0 16px;
+  pointer-events: none;
+}
+
+.toast {
+  font-family: var(--font-latin);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-elevated);
+  padding: 12px 18px;
+  border-radius: 999px;
+  max-width: 420px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.toast--visible { opacity: 1; transform: translateY(0); }
+
+.toast--success { border-color: var(--success); background: linear-gradient(0deg, var(--success-soft), var(--success-soft)), var(--bg-elevated); }
+.toast--warning { border-color: var(--warning); background: linear-gradient(0deg, var(--warning-soft), var(--warning-soft)), var(--bg-elevated); }
+.toast--error   { border-color: var(--danger);  background: linear-gradient(0deg, var(--danger-soft), var(--danger-soft)), var(--bg-elevated); }
+
+@media (max-width: 640px) {
+  .topbar-inner { padding: 14px 16px; }
+  .brand-name { font-size: 15px; }
+  .live-count { font-size: 12px; padding: 5px 10px; }
+  .main { padding: 20px 12px 70px; }
+  .content-grid { grid-template-columns: 1fr; gap: 14px; }
+  .card-inner { padding: 16px; gap: 14px; }
+  .state-panel { padding: 60px 16px; }
+}
+</style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark">◆</span>
+        <span class="brand-name">Content Hub</span>
+      </div>
+      <div id="live-count" class="live-count">— entries available</div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+
+      <div id="loading-state" class="state-panel">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Loading available content…</p>
+      </div>
+
+      <div id="empty-state" class="state-panel" hidden>
+        <div class="state-icon" aria-hidden="true">📭</div>
+        <h2>No content is currently available</h2>
+        <p>New entries will appear here automatically as soon as they're published.</p>
+      </div>
+
+      <div id="error-state" class="state-panel state-panel--error" hidden>
+        <div class="state-icon" aria-hidden="true">⚠️</div>
+        <h2>Something went wrong</h2>
+        <p id="error-message">Unable to reach the content database.</p>
+        <button id="retry-btn" class="btn btn-secondary">Try Again</button>
+      </div>
+
+      <div id="content-grid" class="content-grid" hidden></div>
+
+    </div>
+  </main>
+
+  <template id="card-template">
+    <article class="card" data-doc-id="">
+      <div class="card-inner">
+
+        <div class="field">
+          <div class="field-head">
+            <span class="field-label">Title</span>
+            <button class="icon-copy-btn" data-copy="title" title="Copy title" aria-label="Copy title">⧉</button>
+          </div>
+          <p class="field-value field-title"></p>
+        </div>
+
+        <div class="field">
+          <div class="field-head">
+            <span class="field-label">Description &amp; Keywords</span>
+            <button class="icon-copy-btn" data-copy="description" title="Copy description" aria-label="Copy description">⧉</button>
+          </div>
+          <p class="field-value field-description"></p>
+        </div>
+
+        <div class="field">
+          <div class="field-head">
+            <span class="field-label">Video URL</span>
+            <button class="icon-copy-btn" data-copy="videoUrl" title="Copy video URL" aria-label="Copy video URL">⧉</button>
+          </div>
+          <a class="field-value field-link field-video" href="#" target="_blank" rel="noopener noreferrer"></a>
+        </div>
+
+        <div class="field">
+          <div class="field-head">
+            <span class="field-label">Product URL</span>
+            <button class="icon-copy-btn" data-copy="productUrl" title="Copy product URL" aria-label="Copy product URL">⧉</button>
+          </div>
+          <a class="field-value field-link field-product" href="#" target="_blank" rel="noopener noreferrer"></a>
+        </div>
+
+        <button class="claim-btn" data-action="claim">
+          <span class="claim-btn-label">Copy All &amp; Remove</span>
+        </button>
+
+      </div>
+    </article>
+  </template>
+
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
+  doc,
+  runTransaction,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+// =====================================================
+// 🔥 FIREBASE CONFIGURATION — PASTE YOUR FIREBASE
+// CONSOLE CONFIG HERE
+// =====================================================
+//
+// 1. Go to https://console.firebase.google.com
+// 2. Open your project → Project settings → General
+// 3. Scroll to "Your apps" → select your Web app
+// 4. Copy the firebaseConfig object shown there and
+//    paste the values below, replacing every placeholder.
+//
+// This SAME config must be reused later in the Admin Panel
+// so both panels read/write the same Firestore project.
+// =====================================================
+
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBbHi-Kwq9gJ_20QNrlqY4RkSVRVPZSAMM",
+  authDomain: "ruvoxyman.firebaseapp.com",
+  projectId: "ruvoxyman",
+  storageBucket: "ruvoxyman.firebasestorage.app",
+  messagingSenderId: "917262973960",
+  appId: "1:917262973960:web:ea75e80b5d2bc83948e5bd",
+  measurementId: "G-RE17Y3VGL2"
+};
+
+// Firestore collection name — keep identical across User Panel and
+// the future Admin Panel, so both read/write the same documents.
+const CONTENT_COLLECTION = "contentItems";
+
+// =====================================================
+// END FIREBASE CONFIGURATION
+// =====================================================
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const loadingState = document.getElementById("loading-state");
+const emptyState = document.getElementById("empty-state");
+const errorState = document.getElementById("error-state");
+const errorMessageEl = document.getElementById("error-message");
+const retryBtn = document.getElementById("retry-btn");
+const contentGrid = document.getElementById("content-grid");
+const cardTemplate = document.getElementById("card-template");
+const toastContainer = document.getElementById("toast-container");
+const liveCountEl = document.getElementById("live-count");
+
+const pendingClaims = new Set();
+let unsubscribe = null;
+
+function showState(state) {
+  loadingState.hidden = state !== "loading";
+  emptyState.hidden = state !== "empty";
+  errorState.hidden = state !== "error";
+  contentGrid.hidden = state !== "content";
+}
+
+function setLiveCount(n) {
+  liveCountEl.textContent = n === 1 ? "1 entry available" : `${n} entries available`;
+}
+
+function showToast(message, type = "info") {
+  const toast = document.createElement("div");
+  toast.className = `toast toast--${type}`;
+  toast.textContent = message;
+  toastContainer.appendChild(toast);
+
+  requestAnimationFrame(() => toast.classList.add("toast--visible"));
+
+  setTimeout(() => {
+    toast.classList.remove("toast--visible");
+    toast.addEventListener("transitionend", () => toast.remove(), { once: true });
+  }, 3600);
+}
+
+function isSafeHttpUrl(value) {
+  if (!value) return false;
+  try {
+    const u = new URL(value);
+    return u.protocol === "http:" || u.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  const ok = document.execCommand("copy");
+  document.body.removeChild(textarea);
+  if (!ok) throw new Error("Copy command failed");
+}
+
+function buildFullCopyText(data) {
+  return (
+    `Title:\n${data.title || ""}\n\n` +
+    `Description:\n${data.description || ""}\n\n` +
+    `Video:\n${data.videoUrl || ""}\n\n` +
+    `Product:\n${data.productUrl || ""}`
+  );
+}
+
+function renderCard(docId, data) {
+  const node = cardTemplate.content.firstElementChild.cloneNode(true);
+  node.dataset.docId = docId;
+
+  node.querySelector(".field-title").textContent = data.title || "";
+  node.querySelector(".field-description").textContent = data.description || "";
+
+  const videoEl = node.querySelector(".field-video");
+  if (isSafeHttpUrl(data.videoUrl)) {
+    videoEl.href = data.videoUrl;
+    videoEl.textContent = data.videoUrl;
+  } else {
+    videoEl.removeAttribute("href");
+    videoEl.textContent = data.videoUrl || "—";
+  }
+
+  const productEl = node.querySelector(".field-product");
+  if (isSafeHttpUrl(data.productUrl)) {
+    productEl.href = data.productUrl;
+    productEl.textContent = data.productUrl;
+  } else {
+    productEl.removeAttribute("href");
+    productEl.textContent = data.productUrl || "—";
+  }
+
+  node.querySelectorAll(".icon-copy-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const key = btn.dataset.copy;
+      const value = data[key] || "";
+      try {
+        await copyText(value);
+        showToast("Copied to clipboard", "success");
+      } catch (err) {
+        console.error(err);
+        showToast("Unable to copy. Please try again.", "error");
+      }
+    });
+  });
+
+  const claimBtn = node.querySelector('[data-action="claim"]');
+  claimBtn.addEventListener("click", () => handleClaim(docId, data, claimBtn, node));
+
+  return node;
+}
+
+async function handleClaim(docId, data, buttonEl, cardEl) {
+  if (pendingClaims.has(docId)) return;
+  pendingClaims.add(docId);
+
+  buttonEl.disabled = true;
+  const originalLabel = buttonEl.querySelector(".claim-btn-label").textContent;
+  buttonEl.querySelector(".claim-btn-label").textContent = "Claiming…";
+  cardEl.classList.add("card--busy");
+
+  const docRef = doc(db, CONTENT_COLLECTION, docId);
+
+  try {
+    const claimedData = await runTransaction(db, async (transaction) => {
+      const snap = await transaction.get(docRef);
+
+      if (!snap.exists()) {
+        throw new Error("MISSING");
+      }
+      const current = snap.data();
+      if (current.status !== "available") {
+        throw new Error("ALREADY_CLAIMED");
+      }
+
+      transaction.update(docRef, {
+        status: "claimed",
+        claimedAt: serverTimestamp()
+      });
+
+      return current;
+    });
+
+    try {
+      await copyText(buildFullCopyText(claimedData));
+      showToast("Copied — item claimed successfully", "success");
+    } catch (copyErr) {
+      console.error(copyErr);
+      showToast("Claimed, but copying failed. Please copy manually.", "error");
+    }
+
+    cardEl.classList.add("card--removed");
+    cardEl.addEventListener(
+      "transitionend",
+      () => {
+        cardEl.remove();
+        maybeShowEmptyState();
+      },
+      { once: true }
+    );
+  } catch (err) {
+    console.error(err);
+    if (err.message === "ALREADY_CLAIMED" || err.message === "MISSING") {
+      showToast("This item was just claimed by someone else.", "warning");
+    } else {
+      showToast("Unable to claim this item. Please try again.", "error");
+      buttonEl.disabled = false;
+      buttonEl.querySelector(".claim-btn-label").textContent = originalLabel;
+      cardEl.classList.remove("card--busy");
+    }
+  } finally {
+    pendingClaims.delete(docId);
+  }
+}
+
+function maybeShowEmptyState() {
+  if (contentGrid.children.length === 0) {
+    showState("empty");
+  }
+}
+
+function startListening() {
+  showState("loading");
+
+  const q = query(
+    collection(db, CONTENT_COLLECTION),
+    where("status", "==", "available"),
+    orderBy("createdAt", "asc")
+  );
+
+  unsubscribe = onSnapshot(
+    q,
+    (snapshot) => {
+      const existingIds = new Set(
+        Array.from(contentGrid.children).map((el) => el.dataset.docId)
+      );
+      const incomingIds = new Set(snapshot.docs.map((d) => d.id));
+
+      existingIds.forEach((id) => {
+        if (!incomingIds.has(id) && !pendingClaims.has(id)) {
+          const el = contentGrid.querySelector(`[data-doc-id="${CSS.escape(id)}"]`);
+          if (el) el.remove();
+        }
+      });
+
+      snapshot.docs.forEach((docSnap) => {
+        if (!existingIds.has(docSnap.id)) {
+          const card = renderCard(docSnap.id, docSnap.data());
+          contentGrid.appendChild(card);
+        }
+      });
+
+      setLiveCount(snapshot.size);
+
+      if (snapshot.empty) {
+        showState("empty");
+      } else {
+        showState("content");
+      }
+    },
+    (err) => {
+      console.error(err);
+      errorMessageEl.textContent =
+        err.code === "permission-denied"
+          ? "Access to the content database was denied. Please check Firestore security rules."
+          : "Unable to reach the content database. Check your connection and try again.";
+      showState("error");
+    }
+  );
+}
+
+retryBtn.addEventListener("click", () => {
+  if (unsubscribe) unsubscribe();
+  startListening();
+});
+
+startListening();
+</script>
+</body>
+</html>
